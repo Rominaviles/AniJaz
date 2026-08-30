@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initCatalogo();
     poblarFiltrosEstaticos();
     cargarGenerosEnSelect();
+    setupFiltrosForm();
+    setupLimpiarFiltros();
   }
   if (contenedorDetalle) initDetalle();
   if (gridFavoritos) initFavoritos();
@@ -48,14 +50,83 @@ async function initCatalogo() {
   if (!container) return;
 
   const params = new URLSearchParams(window.location.search);
-  const query = params.get("q") || "";
+  const filtros = {
+    busqueda: params.get("busqueda") || "",
+    genero: params.get("genero") || "",
+    temporada: params.get("temporada") || "",
+    estado: params.get("estado") || "",
+    orden: params.get("orden") || "",
+    pagina: parseInt(params.get("pagina"), 10) || 1,
+    anio: params.get("anio") || ""
+  };
+  
 
-  const inputSearch = document.querySelector('.nav-search input[name="q"]');
-  if (inputSearch && query) inputSearch.value = query;
+  const inputSearch = document.querySelector('.nav-search input[name="busqueda"]');
+  if (inputSearch && filtros.busqueda) inputSearch.value = filtros.busqueda;
 
   container.innerHTML = "<div class='loading'>Consultando el archivo…</div>";
-  const animes = await searchAnimes(query);
+  const { animes, total } = await getCatalogoData(filtros);
   renderCards(container, animes);
+
+  const selectGenero = document.querySelector(".select-genero");
+  const selectTemporada = document.querySelector(".select-temporada");
+  const selectAnio = document.querySelector(".select-anio");
+  const selectEstado = document.querySelector(".select-estado");
+  const selectOrden = document.querySelector(".select-orden");
+
+  if (selectAnio) selectAnio.value = filtros.anio;
+  if (selectGenero) selectGenero.value = filtros.genero;
+  if (selectTemporada) selectTemporada.value = filtros.temporada;
+  if (selectEstado) selectEstado.value = filtros.estado;
+  if (selectOrden) selectOrden.value = filtros.orden;
+
+  const totalPaginas = Math.max(1, Math.ceil(total / 20));
+  renderPaginacion(filtros.pagina, totalPaginas);
+}
+
+function setupFiltrosForm() {
+  const form = document.querySelector(".filters");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams(window.location.search);
+    const busquedaActual = params.get("busqueda") || "";
+
+    const nuevosParams = new URLSearchParams();
+    if (busquedaActual) nuevosParams.set("busqueda", busquedaActual);
+
+    const genero = form.querySelector(".select-genero")?.value;
+    const temporada = form.querySelector(".select-temporada")?.value;
+    const estado = form.querySelector(".select-estado")?.value;
+    const orden = form.querySelector(".select-orden")?.value;
+    const anio = form.querySelector(".select-anio")?.value;
+
+    if (anio) nuevosParams.set("anio", anio);
+    if (genero) nuevosParams.set("genero", genero);
+    if (temporada) nuevosParams.set("temporada", temporada);
+    if (estado) nuevosParams.set("estado", estado);
+    if (orden) nuevosParams.set("orden", orden);
+    // pagina se omite a propósito: toda búsqueda nueva arranca en la página 1
+
+    window.location.href = `catalogo.html?${nuevosParams.toString()}`;
+  });
+}
+
+function setupLimpiarFiltros() {
+  const btn = document.getElementById("btn-limpiar-filtros");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const params = new URLSearchParams(window.location.search);
+    const busqueda = params.get("busqueda") || "";
+
+    const nuevosParams = new URLSearchParams();
+    if (busqueda) nuevosParams.set("busqueda", busqueda);
+
+    window.location.href = `catalogo.html?${nuevosParams.toString()}`;
+  });
 }
 
 // ==========================================
@@ -299,6 +370,15 @@ function poblarFiltrosEstaticos() {
   const selectTemporada = document.querySelector(".select-temporada");
   const selectEstado = document.querySelector(".select-estado");
   const selectOrden = document.querySelector(".select-orden");
+  const selectAnio = document.querySelector(".select-anio");
+  if (selectAnio && selectAnio.options.length <= 1) {
+    const anioActual = new Date().getFullYear();
+    let opciones = `<option value="">Todos</option>`;
+    for (let anio = anioActual; anio >= 2000; anio--) {
+      opciones += `<option value="${anio}">${anio}</option>`;
+    }
+    selectAnio.innerHTML = opciones;
+  }
 
   if (selectTemporada && selectTemporada.options.length <= 1) {
     selectTemporada.innerHTML = `
@@ -351,8 +431,74 @@ function setupSearchForms() {
   document.querySelectorAll("[data-nav-search]").forEach((form) => {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const q = form.querySelector('input[name="q"]')?.value.trim();
-      if (q) window.location.href = `catalogo.html?q=${encodeURIComponent(q)}`;
+      const busqueda = form.querySelector('input[name="busqueda"]')?.value.trim();
+      if (busqueda) window.location.href = `catalogo.html?busqueda=${encodeURIComponent(busqueda)}`;
+      else window.location.href = "catalogo.html";
     });
   });
+}
+
+function generarRangoPaginas(paginaActual, totalPaginas) {
+  const delta = 1;
+  const rango = [];
+
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaActual - delta && i <= paginaActual + delta)) {
+      rango.push(i);
+    }
+  }
+
+  const conElipsis = [];
+  let anterior = null;
+  rango.forEach((pagina) => {
+    if (anterior !== null && pagina - anterior > 1) {
+      conElipsis.push("...");
+    }
+    conElipsis.push(pagina);
+    anterior = pagina;
+  });
+
+  return conElipsis;
+}
+
+function construirUrlConPagina(pagina) {
+  const params = new URLSearchParams(window.location.search);
+  params.set("pagina", pagina);
+  return `catalogo.html?${params.toString()}`;
+}
+
+function renderPaginacion(paginaActual, totalPaginas) {
+  const contenedor = document.getElementById("paginacion-catalogo");
+  if (!contenedor) return;
+
+  if (totalPaginas <= 1) {
+    contenedor.innerHTML = "";
+    return;
+  }
+
+  const paginas = generarRangoPaginas(paginaActual, totalPaginas);
+
+  const botonAnterior = `
+    <a href="${paginaActual > 1 ? construirUrlConPagina(paginaActual - 1) : '#'}"
+       class="pagina-btn pagina-nav ${paginaActual === 1 ? 'is-disabled' : ''}"
+       aria-label="Página anterior">«</a>
+  `;
+
+  const botonSiguiente = `
+    <a href="${paginaActual < totalPaginas ? construirUrlConPagina(paginaActual + 1) : '#'}"
+       class="pagina-btn pagina-nav ${paginaActual === totalPaginas ? 'is-disabled' : ''}"
+       aria-label="Página siguiente">»</a>
+  `;
+
+  const numeros = paginas.map((p) => {
+    if (p === "...") return `<span class="pagina-elipsis">…</span>`;
+    const esActual = p === paginaActual;
+    return `
+      <a href="${esActual ? '#' : construirUrlConPagina(p)}"
+         class="pagina-btn ${esActual ? 'is-active' : ''}"
+         aria-current="${esActual ? 'page' : 'false'}">${p}</a>
+    `;
+  }).join("");
+
+  contenedor.innerHTML = `${botonAnterior}${numeros}${botonSiguiente}`;
 }

@@ -22,14 +22,16 @@ async function getHomeData() {
   }
 }
 
-async function searchAnimes(query) {
+async function getCatalogoData(filtros) {
   try {
-    const res = await fetchAnimeBusqueda(query);
-    const mapeados = mapearListaAnimes(res.data || []);
-    return query ? filtrarPorTituloExacto(mapeados, query) : mapeados;
+    const res = await fetchAnimeCatalogo(filtros);
+    return {
+      animes: mapearListaAnimes(res.data || []),
+      total: res.meta?.count ?? (res.data ? res.data.length : 0)
+    };
   } catch (error) {
-    console.error("Error en searchAnimes:", error);
-    return [];
+    console.error("Error en getCatalogoData:", error);
+    return { animes: [], total: 0 };
   }
 }
 

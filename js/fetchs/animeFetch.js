@@ -18,11 +18,21 @@ async function fetchAnimeDestacados() {
   return fetchFromApi(`/anime?sort=-averageRating&page[limit]=20`);
 }
 
-async function fetchAnimeBusqueda(query) {
-  const endpoint = query
-    ? `/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=20`
-    : `/anime?sort=-userCount&page[limit]=20`;
-  return fetchFromApi(endpoint);
+function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada = "", orden = "", pagina = 1 } = {}) {
+  const LIMITE = 20;
+  const offset = (pagina - 1) * LIMITE;
+  const params = new URLSearchParams();
+
+  if (busqueda) params.set("filter[text]", busqueda);
+  if (genero) params.set("filter[categories]", genero);
+  if (estado) params.set("filter[status]", estado);
+  if (temporada) params.set("filter[season]", temporada);
+
+  params.set("sort", orden || "-userCount");
+  params.set("page[limit]", String(LIMITE));
+  params.set("page[offset]", String(offset));
+
+  return fetchFromApi(`/anime?${params.toString()}`);
 }
 
 async function fetchAnimePorId(id) {
@@ -31,6 +41,24 @@ async function fetchAnimePorId(id) {
 
 async function fetchGeneros() {
   return fetchFromApi(`/categories?page[limit]=40&sort=title`);
+}
+
+function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada = "", anio = "", orden = "", pagina = 1 } = {}) {
+  const LIMITE = 20;
+  const offset = (pagina - 1) * LIMITE;
+  const params = new URLSearchParams();
+
+  if (busqueda) params.set("filter[text]", busqueda);
+  if (genero) params.set("filter[categories]", genero);
+  if (estado) params.set("filter[status]", estado);
+  if (temporada) params.set("filter[season]", temporada);
+  if (anio) params.set("filter[seasonYear]", anio);
+
+  params.set("sort", orden || "-userCount");
+  params.set("page[limit]", String(LIMITE));
+  params.set("page[offset]", String(offset));
+
+  return fetchFromApi(`/anime?${params.toString()}`);
 }
 
 // De Google
