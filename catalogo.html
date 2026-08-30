@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo — ANIDREX</title>
+  <meta name="description" content="Explorá el catálogo de anime por género, temporada y estado de emisión.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="index.html" class="logo"><span class="dex">ANI</span>DREX <span class="tag">Organizador</span></a>
+
+      <form class="nav-search" data-nav-search>
+        <input type="search" name="q" placeholder="Buscar un anime…" aria-label="Buscar anime" autocomplete="off">
+        <button type="submit">Buscar</button>
+      </form>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      <nav class="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html" aria-current="page">Catálogo</a>
+        <a href="favoritos.html">Mis Favoritos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section style="padding-block:2.6rem 0;">
+      <div class="container">
+        <span class="eyebrow">Catálogo completo</span>
+        <h1 style="font-size:clamp(2rem,5vw,3rem);">Encontrá tu anime</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+
+        <!-- Formulario de Filtros Dinámicos -->
+        <form class="filters" data-form-filtros>
+          <div class="field-inline">
+            <label for="f-genero">Género</label>
+            <select id="f-genero" name="genero" class="select-genero">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
+          <div class="field-inline">
+            <label for="f-temporada">Temporada</label>
+            <select id="f-temporada" name="temporada" class="select-temporada">
+              <option value="">Todas</option>
+            </select>
+          </div>
+
+          <div class="field-inline">
+            <label for="f-estado">Estado</label>
+            <select id="f-estado" name="estado" class="select-estado">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
+          <div class="field-inline">
+            <label for="f-orden">Ordenar por</label>
+            <select id="f-orden" name="orden" class="select-orden">
+              <option value="">Por defecto</option>
+            </select>
+          </div>
+
+          <!-- Botón con ancho contenido -->
+          <div class="field-inline field-btn">
+            <button type="submit" class="btn-filtrar-catalogo">Filtrar</button>
+          </div>
+        </form>
+
+        <!-- Grilla donde se cargan las tarjetas -->
+        <div class="card-grid" id="grid-catalogo">
+          <div class="loading">Cargando anime…</div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <p>&copy; 2026 ANIDREX — Tu guía y organizador de anime.</p>
+      <p><a href="index.html">Volver al inicio →</a></p>
+    </div>
+  </footer>
+
+  <script src="js/fetchs/animeFetch.js"></script>
+  <script src="js/mapeos/animeMapper.js"></script>
+  <script src="js/metodos/animeFilter.js"></script>
+  <script src="js/services/animeService.js"></script>
+  <script src="js/prueba.js"></script>
+</body>
+
+</html>

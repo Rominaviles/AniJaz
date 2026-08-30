@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANIDREX — Tu Guía y Organizador de Anime</title>
+  <meta name="description" content="Descubrí, organizá y seguí tus series de anime favoritas en un solo lugar.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="index.html" class="logo"><span class="dex">ANI</span>DREX <span class="tag">Organizador</span></a>
+
+      <form class="nav-search" data-nav-search>
+        <input type="search" name="q" placeholder="Buscar un anime…" aria-label="Buscar anime">
+        <button type="submit">Buscar</button>
+      </form>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      <nav class="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="favoritos.html">Mis Favoritos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+  <div class="container hero-grid">
+    
+    <div class="hero-main">
+      <span class="eyebrow">Plataforma de Anime</span>
+      <h1>Explorá y <span class="accent">organizá</span> tu mundo anime</h1>
+      <p class="lead">Descubrí las series del momento, consultá fichas detalladas y guardá tus animes favoritos para seguirles el rastro.</p>
+
+      <form class="hero-search" data-nav-search>
+        <input type="search" name="q" placeholder="Ej: Death Note, Steins;Gate, Shonen…" aria-label="Buscar anime">
+        <button type="submit">Consultar</button>
+      </form>
+
+      <div class="hero-tags">
+        <a href="catalogo.html?genero=Acci%C3%B3n">Acción</a>
+        <a href="catalogo.html?genero=Fantas%C3%ADa">Fantasía</a>
+        <a href="catalogo.html?genero=Ciencia+ficci%C3%B3n">Ciencia ficción</a>
+        <a href="catalogo.html?estado=En+emisi%C3%B3n">En emisión</a>
+        <a href="catalogo.html">Ver todo el catálogo →</a>
+      </div>
+    </div>
+
+    <aside class="history-box">
+      <div class="history-header">
+        <h3>Vistos Recientemente</h3>
+        <button id="btn-limpiar-historial" title="Borrar historial">Limpiar</button>
+      </div>
+      <div id="contenedor-historial" class="history-list">
+        <p class="empty-history">Aún no consultaste ninguna ficha.</p>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+    <section>
+      <div class="container">
+        <div class="channel-head">
+          <h2>En emisión ahora</h2>
+          <p class="lead">Series que están estrenando episodios esta temporada.</p>
+        </div>
+        <div class="card-grid" id="grid-emision">
+          <div class="loading">Cargando series en emisión…</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="channel-head">
+          <h2>Mejor valorados</h2>
+          <p class="lead">Las series más aclamadas por la comunidad.</p>
+        </div>
+        <div class="card-grid" id="grid-destacados">
+          <div class="loading">Cargando destacados…</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <p>&copy; 2026 ANIDREX — Tu guía y organizador de anime.</p>
+      <p><a href="catalogo.html">Ver catálogo completo →</a></p>
+    </div>
+  </footer>
+
+  <script src="js/fetchs/animeFetch.js"></script>
+  <script src="js/mapeos/animeMapper.js"></script>
+  <script src="js/metodos/animeFilter.js"></script>
+  <script src="js/services/animeService.js"></script>
+  <script src="js/prueba.js"></script>
+</body>
+
+</html>
