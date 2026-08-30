@@ -4,14 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ficha de anime — ANIDREX</title>
-  <meta name="description" content="Ficha detallada de un anime: sinopsis, estudio, episodios y valoración.">
+  <title>ANIDREX — Tu Guía y Organizador de Anime</title>
+  <meta name="description" content="Descubrí, organizá y seguí tus series de anime favoritas en un solo lugar.">
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -23,12 +27,13 @@
       <a href="index.html" class="logo"><span class="dex">ANI</span>DREX <span class="tag">Organizador</span></a>
 
       <form class="nav-search" data-nav-search>
-        <input type="search" name="q" placeholder="Buscar un anime…" aria-label="Buscar anime" autocomplete="off">
+        <input type="search" name="q" placeholder="Buscar un anime…" aria-label="Buscar anime">
         <button type="submit">Buscar</button>
       </form>
 
-      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
-      <nav class="nav" aria-label="Principal">
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">☰</button>
+
+      <nav id="main-nav" class="nav" aria-label="Principal">
         <a href="index.html">Inicio</a>
         <a href="catalogo.html">Catálogo</a>
         <a href="favoritos.html">Mis Favoritos</a>
@@ -37,44 +42,46 @@
   </header>
 
   <main>
-    <div class="container" id="detalle-contenido" style="padding-block: 2.6rem;">
-      <div class="loading">Consultando el archivo…</div>
+    <div class="container detail-content" id="detalle-contenido" aria-live="polite">
+      <div class="loading" role="status">Consultando el anime…</div>
     </div>
   </main>
 
-   <!-- Modal de Preferencias para Favoritos (debe estar en detalle.html o en las vistas donde se interactúe con el modal) -->
-  <div id="modal-favoritos" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
-    <div style="background:#1e2230; padding:2rem; border-radius:8px; max-width:450px; width:90%; color:#fff; border:1px solid #3a3f58;">
-      <h2 style="margin-top:0;">Personalizar Favorito</h2>
+  <!-- Modal de preferencias de favorito -->
+  <div id="modal-favoritos" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-favoritos-titulo">
+    <div class="modal-box">
+      <h2 id="modal-favoritos-titulo" class="modal-title">Personalizar Favorito</h2>
       <form id="form-favorito">
-        
-        <div style="margin-bottom:1rem;">
-          <label style="display:block; margin-bottom:0.4rem;">Estado de seguimiento *</label>
-          <select id="fav-estado-seguimiento" required style="width:100%; padding:0.5rem; background:#12151e; color:#fff; border:1px solid #4a4d68; border-radius:4px;">
+
+        <div class="form-group">
+          <label for="fav-estado-seguimiento" class="form-label">Estado de seguimiento *</label>
+          <select id="fav-estado-seguimiento" name="estado-seguimiento" required class="form-control">
             <option value="Para ver">Para ver</option>
             <option value="Viendo">Viendo</option>
             <option value="Completado">Completado</option>
           </select>
         </div>
 
-        <div style="margin-bottom:1rem;">
-          <label style="display:block; margin-bottom:0.4rem;">Prioridad (1 o mayor) *</label>
-          <input type="number" id="fav-prioridad" min="1" value="1" required style="width:100%; padding:0.5rem; background:#12151e; color:#fff; border:1px solid #4a4d68; border-radius:4px;">
+        <div class="form-group">
+          <label for="fav-prioridad" class="form-label">Prioridad (1 o mayor) *</label>
+          <input type="number" id="fav-prioridad" name="prioridad" min="1" value="1" required class="form-control">
         </div>
 
-        <div style="margin-bottom:1rem;">
-          <label style="display:block; margin-bottom:0.4rem;">Etiqueta personalizada *</label>
-          <input type="text" id="fav-etiqueta" placeholder="Ej: Recomendado, Shonen top..." required style="width:100%; padding:0.5rem; background:#12151e; color:#fff; border:1px solid #4a4d68; border-radius:4px;">
+        <div class="form-group">
+          <label for="fav-etiqueta" class="form-label">Etiqueta personalizada *</label>
+          <input type="text" id="fav-etiqueta" name="etiqueta" placeholder="Ej: Recomendado, Shonen top..." required
+            class="form-control">
         </div>
 
-        <div style="margin-bottom:1.5rem;">
-          <label style="display:block; margin-bottom:0.4rem;">Nota personal (máx. 200 caract.)</label>
-          <textarea id="fav-nota" maxlength="200" rows="3" placeholder="Escribí una nota opcional..." style="width:100%; padding:0.5rem; background:#12151e; color:#fff; border:1px solid #4a4d68; border-radius:4px; resize:none;"></textarea>
+        <div class="form-group form-group-last">
+          <label for="fav-nota" class="form-label">Nota personal (máx. 200 caract.)</label>
+          <textarea id="fav-nota" name="nota" maxlength="200" rows="3" placeholder="Escribí una nota opcional..."
+            class="form-control form-textarea"></textarea>
         </div>
 
-        <div style="display:flex; gap:1rem; justify-content:flex-end;">
-          <button type="button" id="btn-cerrar-modal" style="padding:0.5rem 1rem; background:#4a4d68; color:#fff; border:none; border-radius:4px; cursor:pointer;">Cancelar</button>
-          <button type="submit" style="padding:0.5rem 1.5rem; background:#e63946; color:#fff; border:none; border-radius:4px; cursor:pointer;">Guardar</button>
+        <div class="modal-actions">
+          <button type="button" id="btn-cerrar-modal" class="modal-btn-cancel">Cancelar</button>
+          <button type="submit" class="modal-btn-save">Guardar</button>
         </div>
 
       </form>
@@ -91,8 +98,10 @@
   <script src="js/fetchs/animeFetch.js"></script>
   <script src="js/mapeos/animeMapper.js"></script>
   <script src="js/metodos/animeFilter.js"></script>
+  <script src="js/metodos/animeStorage.js"></script>
   <script src="js/services/animeService.js"></script>
   <script src="js/prueba.js"></script>
+
 </body>
 
 </html>

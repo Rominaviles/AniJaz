@@ -1,0 +1,62 @@
+// ==========================================
+// ALMACENAMIENTO (Favoritos e Historial en LocalStorage)
+// Funciones de datos puras: no tocan el DOM.
+// ==========================================
+
+const STORAGE_KEY_FAVORITOS = "anidrex_favoritos";
+const STORAGE_KEY_HISTORIAL = "anidrex_historial";
+
+// --- Favoritos ---
+function obtenerFavoritos() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY_FAVORITOS)) || [];
+}
+
+function esFavorito(id) {
+  const favs = obtenerFavoritos();
+  return favs.some((item) => String(item.id) === String(id));
+}
+
+function guardarEnFavoritos(animeData) {
+  const favs = obtenerFavoritos();
+  const index = favs.findIndex((item) => String(item.id) === String(animeData.id));
+
+  if (index >= 0) {
+    favs[index] = animeData;
+  } else {
+    favs.push(animeData);
+  }
+
+  localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(favs));
+}
+
+function eliminarDeFavoritos(id) {
+  const favs = obtenerFavoritos().filter((item) => String(item.id) !== String(id));
+  localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(favs));
+}
+
+// --- Historial ---
+function obtenerHistorial() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORIAL)) || [];
+}
+
+function guardarEnHistorial(anime) {
+  // Si ya existía, lo sacamos para moverlo al principio (evita duplicados)
+  const historial = obtenerHistorial().filter((item) => String(item.id) !== String(anime.id));
+
+  const itemHistorial = {
+    id: String(anime.id),
+    titulo: anime.titulo,
+    poster: anime.poster,
+    rating: anime.rating,
+    duracionMin: anime.duracionMin,
+    estado: anime.estado,
+    visitadoEn: new Date().toISOString()
+  };
+
+  historial.unshift(itemHistorial);
+  localStorage.setItem(STORAGE_KEY_HISTORIAL, JSON.stringify(historial));
+}
+
+function limpiarHistorial() {
+  localStorage.removeItem(STORAGE_KEY_HISTORIAL);
+}
