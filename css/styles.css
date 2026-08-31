@@ -447,8 +447,10 @@ section{ padding-block:5.12rem; position:relative; }
 
 /* ---------- Grilla y tarjetas de anime ---------- */
 .card-grid{
-  display:grid;
-  gap:2.24rem;
+   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  gap: 2.4rem;
+  margin-block: 2rem 4rem;
 }
 
 /* Desktop (más de 64rem): 3 o más resultados por fila */
@@ -473,29 +475,38 @@ section{ padding-block:5.12rem; position:relative; }
 }
 
 .anime-card{
-  background:var(--panel);
-  border:0.1rem solid var(--line);
-  border-radius:var(--radius-lg);
-  overflow:hidden;
-  display:flex; flex-direction:column;
-  position:relative;
-  transition:transform .2s ease, border-color .2s ease;
+    position: relative;
+  background: var(--night-900);
+  border-radius: var(--radius-lg); 
+  overflow: hidden;
+  border: 0.1rem solid var(--line);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              box-shadow 0.3s ease, 
+              border-color 0.3s ease;
 }
 .anime-card:hover{ 
-  transform:translateY(-0.6rem); 
-  border-color:var(--cyan);
+    transform: translateY(-0.6rem);
+  border-color: var(--cyan);
+  box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.4), 
+              0 0 1.6rem rgba(62, 215, 222, 0.15);
 
  }
 .poster{
-  aspect-ratio:3/4;
-  display:flex; align-items:flex-end;
-  padding:1.44rem;
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
 }
 
 .anime-card:hover .poster img {
   transform: scale(1.05);
+}
+
+.poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 65%, rgba(11, 14, 26, 0.85));
+  pointer-events: none;
 }
 
 .poster .num{
@@ -505,18 +516,32 @@ section{ padding-block:5.12rem; position:relative; }
   padding:.24rem .72rem; border-radius:0.3rem; letter-spacing:.04em;
 }
 .poster .estado{
-  position:absolute; top:1.12rem; right:1.12rem;
-  font-family:var(--font-mono); font-size:.992rem; text-transform:uppercase;
-  padding:.24rem .8rem; border-radius:var(--radius-pill); letter-spacing:.03em;
-  background:rgba(11,14,26,.6);
-}
-.poster .estado.emision{ color:var(--cyan); border:0.1rem solid var(--cyan); }
-.poster .estado.finalizada{ color:var(--fog); border:0.1rem solid var(--line); }
-.poster .estado.proximamente { 
-  color: var(--gold); 
-  border: 0.1rem solid var(--gold); 
+   position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
   font-weight: 700;
-  text-shadow: 0 0 0.8rem rgba(242, 183, 5, 0.4); /* Sutil brillo en el texto en vez del fondo */
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(0.4rem); 
+  z-index: 2;
+}
+.poster .estado.emision{ 
+   background: rgba(62, 215, 222, 0.15);
+  color: var(--cyan);
+  border: 0.1rem solid rgba(62, 215, 222, 0.4);
+ }
+.poster .estado.finalizada{ 
+  background: rgba(28, 36, 64, 0.75);
+  color: var(--fog);
+  border: 0.1rem solid var(--line);
+ }
+.poster .estado.proximamente { 
+   background: rgba(242, 183, 5, 0.15);
+  color: var(--gold);
+  border: 0.1rem solid rgba(242, 183, 5, 0.4);
 }
 .poster .inicial{
   font-family:var(--font-display);
@@ -524,14 +549,32 @@ section{ padding-block:5.12rem; position:relative; }
   color:rgba(11,14,26,.55);
   line-height:1;
 }
-.card-body{ padding:1.6rem 1.6rem 1.76rem; display:flex; flex-direction:column; gap:.8rem; flex:1; }
-.card-body h3{ font-family:var(--font-body); font-weight:700; font-size:1.6rem; text-transform:none; letter-spacing:0; margin:0; }
-.card-meta{
-  display:flex; justify-content:space-between; align-items:center;
-  font-family:var(--font-mono); font-size:1.152rem; color:var(--fog-dim);
-  margin-top:auto;
+.card-body{ 
+  padding: 1.6rem;
+  background: var(--night-900);
+ }
+.card-body h3{
+  font-family: var(--font-body);
+  font-size: 1.55rem;
+  font-weight: 600;
+  text-transform: none;
+  margin: 0 0 0.8rem 0;
+  color: var(--paper);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.stars{ color:var(--gold); font-size:1.248rem; letter-spacing:.05em; }
+.card-meta{
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.3rem;
+  color: var(--fog-dim);
+}
+.stars{
+  color: var(--gold);
+  font-weight: 600; 
+}
 .tag-row{ display:flex; gap:.56rem; flex-wrap:wrap; }
 .tag{
   font-family:var(--font-mono); font-size:1.04rem; text-transform:uppercase;
