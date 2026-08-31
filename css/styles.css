@@ -505,8 +505,9 @@ section{ padding-block:5.12rem; position:relative; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 65%, rgba(11, 14, 26, 0.85));
+  background: linear-gradient(to bottom, transparent 60%, #10152a 100%);
   pointer-events: none;
+  z-index: 1;
 }
 
 .poster .num{
@@ -610,6 +611,7 @@ section{ padding-block:5.12rem; position:relative; }
   background:var(--night-900); border:0.1rem solid var(--line); border-radius:var(--radius-lg);
   padding:2.08rem; margin-bottom:3.2rem;
 }
+
 .field-btn {
   flex-grow: 0;
 }
@@ -702,7 +704,7 @@ section{ padding-block:5.12rem; position:relative; }
 }
 .empty-state h3{ font-family:var(--font-body); text-transform:none; font-size:1.84rem; color:var(--paper); }
 
-/* ---------- Página de detalle (legacy, no usada por renderDetalle actual) ---------- */
+/* ---------- Página de detalle ---------- */
 .detail-hero{
   display:grid; grid-template-columns:26rem 1fr; gap:4.16rem;
   padding-block:4.8rem 4rem;
