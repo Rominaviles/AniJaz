@@ -56,8 +56,7 @@
             <input type="search" name="busqueda" placeholder="Ej: Death Note, Steins;Gate, Shonen…" aria-label="Buscar anime">
             <button type="submit">Consultar</button>
           </form>
-
-          <!-- Contenedor listo para que JS inyecte los géneros dinámicamente desde la API -->
+          
           <div class="hero-tags" id="contenedor-generos-dinamicos">
             <a href="catalogo.html">Ver todo el catálogo →</a>
           </div>
@@ -80,7 +79,7 @@
       <div class="container">
         <div class="channel-head">
           <h2>En emisión ahora</h2>
-          <p class="lead">Series que están estrenando episodios esta temporada.</p>
+          <p class="lead">Los que están saliendo semanalmente.</p>
         </div>
         <div class="card-grid" id="grid-emision" aria-live="polite">
           <div class="loading">Cargando series en emisión…</div>
@@ -91,11 +90,23 @@
     <section>
       <div class="container">
         <div class="channel-head">
-          <h2>Mejor valorados</h2>
-          <p class="lead">Las series más aclamadas por la comunidad.</p>
+          <h2>Tendencias</h2>
+          <p class="lead">Los más aclamados por la comunidad.</p>
         </div>
         <div class="card-grid" id="grid-destacados" aria-live="polite">
           <div class="loading">Cargando destacados…</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="channel-head">
+          <h2>Próximos estrenos</h2>
+          <p class="lead">Los que llegarán pronto.</p>
+        </div>
+        <div class="card-grid" id="grid-proximos" aria-live="polite">
+          <div class="loading">Cargando próximos estrenos…</div>
         </div>
       </div>
     </section>

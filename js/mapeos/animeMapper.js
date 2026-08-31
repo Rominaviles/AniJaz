@@ -14,13 +14,20 @@ function mapearAnime(item) {
     .replace(/\(Fuente:.*?\)/g, "")
     .trim();
 
+  let estadoFormateado = "Finalizado";
+  if (attr.status === "current") {
+    estadoFormateado = "En emisión";
+  } else if (attr.status === "upcoming") {
+    estadoFormateado = "Próximamente";
+  }
+
   return {
     id: String(item.id),
     titulo: attr.canonicalTitle || attr.titles?.en || "Sin título",
     poster: attr.posterImage?.small || attr.posterImage?.medium || attr.posterImage?.original || "",
     posterGrande: attr.posterImage?.large || attr.posterImage?.original || "",
     rating: rating,
-    estado: attr.status === "current" ? "En emisión" : "Finalizado",
+    estado: estadoFormateado,
     duracionMin: attr.episodeLength || 24,
     sinopsis: sinopsisTexto,
     episodios: attr.episodeCount || "N/C",
@@ -29,6 +36,7 @@ function mapearAnime(item) {
     showType: (attr.showType || attr.subtype || "").toUpperCase()
   };
 }
+
 
 function mapearListaAnimes(lista = []) {
   return lista.map(mapearAnime);

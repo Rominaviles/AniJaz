@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   setupSearchForms();
 
-  const gridHome = document.getElementById("grid-emision") || document.getElementById("grid-destacados");
+  const gridHome = document.getElementById("grid-emision") || document.getElementById("grid-destacados") || document.getElementById("grid-proximos");
   const gridCatalogo = document.getElementById("grid-catalogo");
   const contenedorDetalle = document.getElementById("detalle-contenido");
   const gridFavoritos = document.getElementById("grid-favoritos");
@@ -35,14 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
 async function initHome() {
   const gridEmision = document.getElementById("grid-emision");
   const gridDestacados = document.getElementById("grid-destacados");
+  const gridProximos = document.getElementById("grid-proximos");
 
   if (gridEmision) gridEmision.innerHTML = "<div class='loading'>Cargando emisión...</div>";
   if (gridDestacados) gridDestacados.innerHTML = "<div class='loading'>Cargando destacados...</div>";
+  if (gridProximos) gridProximos.innerHTML = "<div class='loading'>Cargando proximos...</div>";
 
-  const { emision, destacados } = await getHomeData();
+  const { emision, destacados, proximos } = await getHomeData();
 
   if (gridEmision) renderCards(gridEmision, emision);
   if (gridDestacados) renderCards(gridDestacados, destacados);
+  if (gridProximos) renderCards(gridProximos, proximos);
 }
 
 async function initCatalogo() {
@@ -64,7 +67,7 @@ async function initCatalogo() {
   const inputSearch = document.querySelector('.nav-search input[name="busqueda"]');
   if (inputSearch && filtros.busqueda) inputSearch.value = filtros.busqueda;
 
-  container.innerHTML = "<div class='loading'>Consultando el archivo…</div>";
+  container.innerHTML = "<div class='loading'>Buscando el anime…</div>";
   const { animes, total } = await getCatalogoData(filtros);
   renderCards(container, animes);
 
@@ -108,7 +111,6 @@ function setupFiltrosForm() {
     if (temporada) nuevosParams.set("temporada", temporada);
     if (estado) nuevosParams.set("estado", estado);
     if (orden) nuevosParams.set("orden", orden);
-    // pagina se omite a propósito: toda búsqueda nueva arranca en la página 1
 
     window.location.href = `catalogo.html?${nuevosParams.toString()}`;
   });
@@ -145,7 +147,7 @@ async function initDetalle() {
     return;
   }
 
-  container.innerHTML = "<div class='loading'>Consultando el archivo…</div>";
+  container.innerHTML = "<div class='loading'>Consultando…</div>";
 
   try {
     const anime = await getAnimeDetalle(animeId);
@@ -166,8 +168,13 @@ async function initDetalle() {
 }
 
 function renderDetalle(container, anime) {
-  const esEmision = anime.estado === "En emisión";
-  const claseEstado = esEmision ? "emision" : "finalizada";
+  let claseEstado = "finalizada";
+  if (anime.estado === "En emisión") {
+    claseEstado = "emision";
+  } else if (anime.estado === "Próximamente") {
+    claseEstado = "proximamente";
+  }
+
   const imagenHTML = anime.posterGrande || anime.poster
     ? `<img src="${anime.posterGrande || anime.poster}" alt="${anime.titulo}">`
     : `<span class="inicial">${anime.titulo.charAt(0)}</span>`;
@@ -199,6 +206,8 @@ function renderDetalle(container, anime) {
     </div>
   `;
 }
+
+
 
 function initFavoritos() {
   const container = document.getElementById("grid-favoritos");
@@ -253,8 +262,14 @@ function renderCards(container, list, esVistaFavoritos = false) {
     const card = document.createElement("article");
     card.classList.add("anime-card");
 
-    const esEmision = anime.estado === "En emisión";
-    const claseEstado = esEmision ? "emision" : "finalizada";
+    // Agregamos la validación para contemplar los 3 estados de forma limpia
+    let claseEstado = "finalizada";
+    if (anime.estado === "En emisión") {
+      claseEstado = "emision";
+    } else if (anime.estado === "Próximamente") {
+      claseEstado = "proximamente";
+    }
+
     const imagenHTML = anime.poster
       ? `<img src="${anime.poster}" alt="${anime.titulo}" loading="lazy">`
       : `<span class="inicial">${anime.titulo ? anime.titulo.charAt(0) : "A"}</span>`;
@@ -301,6 +316,7 @@ function renderCards(container, list, esVistaFavoritos = false) {
     });
   }
 }
+
 
 function setupModalFavoritos(anime) {
   const btnFav = document.getElementById("btn-fav");

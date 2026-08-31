@@ -4,23 +4,27 @@
 
 async function getHomeData() {
   try {
-    const [emisionRes, destacadosRes] = await Promise.all([
+    const [emisionRes, destacadosRes, proximosRes] = await Promise.all([
       fetchAnimeEmision(),
-      fetchAnimeDestacados()
+      fetchAnimeDestacados(),
+      fetchAnimeProximos() 
     ]);
 
     const emisionRaw = mapearListaAnimes(emisionRes.data || []);
     const destacadosRaw = mapearListaAnimes(destacadosRes.data || []);
+    const proximosRaw = mapearListaAnimes(proximosRes.data || []); 
 
     return {
       emision: emisionRaw.slice(0, 4),
-      destacados: destacadosRaw.slice(0, 4)
+      destacados: destacadosRaw.slice(0, 4),
+      proximos: proximosRaw.slice(0, 4) 
     };
   } catch (error) {
     console.error("Error en getHomeData:", error);
-    return { emision: [], destacados: [] };
+    return { emision: [], destacados: [], proximos: [] }; 
   }
 }
+
 
 async function getCatalogoData(filtros) {
   try {

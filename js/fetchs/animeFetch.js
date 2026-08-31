@@ -18,21 +18,8 @@ async function fetchAnimeDestacados() {
   return fetchFromApi(`/anime?sort=-averageRating&page[limit]=20`);
 }
 
-function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada = "", orden = "", pagina = 1 } = {}) {
-  const LIMITE = 20;
-  const offset = (pagina - 1) * LIMITE;
-  const params = new URLSearchParams();
-
-  if (busqueda) params.set("filter[text]", busqueda);
-  if (genero) params.set("filter[categories]", genero);
-  if (estado) params.set("filter[status]", estado);
-  if (temporada) params.set("filter[season]", temporada);
-
-  params.set("sort", orden || "-userCount");
-  params.set("page[limit]", String(LIMITE));
-  params.set("page[offset]", String(offset));
-
-  return fetchFromApi(`/anime?${params.toString()}`);
+async function fetchAnimeProximos() {
+  return fetchFromApi(`/anime?filter[status]=upcoming&sort=-userCount&page[limit]=20`);
 }
 
 async function fetchAnimePorId(id) {
@@ -48,11 +35,14 @@ function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada
   const offset = (pagina - 1) * LIMITE;
   const params = new URLSearchParams();
 
-  if (busqueda) params.set("filter[text]", busqueda);
-  if (genero) params.set("filter[categories]", genero);
-  if (estado) params.set("filter[status]", estado);
-  if (temporada) params.set("filter[season]", temporada);
-  if (anio) params.set("filter[seasonYear]", anio);
+  if (busqueda) {
+    params.set("filter[text]", busqueda);
+  } else {
+    if (genero) params.set("filter[categories]", genero);
+    if (estado) params.set("filter[status]", estado);
+    if (temporada) params.set("filter[season]", temporada);
+    if (anio) params.set("filter[seasonYear]", anio);
+  }
 
   params.set("sort", orden || "-userCount");
   params.set("page[limit]", String(LIMITE));
