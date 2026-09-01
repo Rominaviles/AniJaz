@@ -1,7 +1,5 @@
-// ==========================================
 // ALMACENAMIENTO (Favoritos e Historial en LocalStorage)
 // Funciones de datos puras: no tocan el DOM.
-// ==========================================
 
 const STORAGE_KEY_FAVORITOS = "anidrex_favoritos";
 const STORAGE_KEY_HISTORIAL = "anidrex_historial";
@@ -15,7 +13,7 @@ function _leerJSON(key) {
   }
 }
 
-// --- Favoritos ---
+// FAVORITOS
 function obtenerFavoritos() {
   return _leerJSON(STORAGE_KEY_FAVORITOS);
 }
@@ -43,7 +41,7 @@ function eliminarDeFavoritos(id) {
   localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(favs));
 }
 
-// --- Historial ---
+// HISTORIAL
 function obtenerHistorial() {
   return _leerJSON(STORAGE_KEY_HISTORIAL);
 }

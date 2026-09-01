@@ -1,6 +1,4 @@
-// ==========================================
 // SERVICIOS (orquestan fetch + mapeo + filtros)
-// ==========================================
 
 async function getHomeData() {
   try {
@@ -24,7 +22,6 @@ async function getHomeData() {
     return { emision: [], destacados: [], proximos: [] };
   }
 }
-
 
 async function getCatalogoData(filtros) {
   try {

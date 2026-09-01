@@ -1,6 +1,4 @@
-// ==========================================
 // INICIALIZACIÓN Y RENDERIZADO (DOM/UI)
-// ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
   setupSearchForms();
@@ -28,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupFiltrosForm();
     setupLimpiarFiltros();
   }
+
   if (contenedorDetalle) initDetalle();
   if (gridFavoritos) initFavoritos();
 });
@@ -60,7 +59,6 @@ async function initHome() {
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", initHome);
 
 async function initCatalogo() {
@@ -78,7 +76,6 @@ async function initCatalogo() {
     anio: params.get("anio") || ""
   };
   
-
   const inputSearch = document.querySelector('.nav-search input[name="busqueda"]');
   if (inputSearch && filtros.busqueda) inputSearch.value = filtros.busqueda;
 
@@ -146,9 +143,7 @@ function setupLimpiarFiltros() {
   });
 }
 
-// ==========================================
 // DETALLE (Página detalle.html)
-// ==========================================
 
 async function initDetalle() {
   const container = document.getElementById("detalle-contenido");
@@ -267,8 +262,6 @@ function renderDetalle(container, anime) {
   `;
 }
 
-
-
 function initFavoritos() {
   const container = document.getElementById("grid-favoritos");
   if (!container) return;
@@ -377,7 +370,6 @@ function renderCards(container, list, esVistaFavoritos = false) {
   }
 }
 
-
 function setupModalFavoritos(anime) {
   const btnFav = document.getElementById("btn-fav");
   const modal = document.getElementById("modal-favoritos");
@@ -398,7 +390,6 @@ function setupModalFavoritos(anime) {
       eliminarDeFavoritos(String(anime.id));
       btnFav.textContent = "♡ Agregar a Favoritos";
       btnFav.classList.remove("is-favorito");
-      alert("Anime quitado de tus favoritos.");
     } else {
       if (modal) {
         modal.classList.add("is-open");
@@ -415,6 +406,7 @@ function setupModalFavoritos(anime) {
   }
 
   if (formFav) {
+    
     formFav.addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -436,8 +428,6 @@ function setupModalFavoritos(anime) {
       modal.classList.remove("is-open");
       btnFav.textContent = "♥ Quitar de Favoritos";
       btnFav.classList.add("is-favorito");
-
-      alert("¡Anime agregado a favoritos!");
     });
   }
 }

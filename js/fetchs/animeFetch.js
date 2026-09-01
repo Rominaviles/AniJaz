@@ -1,6 +1,4 @@
-// ==========================================
 // FETCH (Peticiones a la API de Kitsu)
-// ==========================================
 
 const BASE_URL = "https://kitsu.io/api/edge";
 
@@ -64,7 +62,7 @@ function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada
   return fetchFromApi(`/anime?${params.toString()}`);
 }
 
-// Api Google
+// API GOOGLE PARA TRADUCCION
 const _cacheTraducciones = new Map();
 
 async function traducirTexto(texto) {
