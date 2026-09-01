@@ -6,9 +6,18 @@
 const STORAGE_KEY_FAVORITOS = "anidrex_favoritos";
 const STORAGE_KEY_HISTORIAL = "anidrex_historial";
 
+function _leerJSON(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch (error) {
+    console.error(`Error al leer "${key}" de localStorage:`, error);
+    return [];
+  }
+}
+
 // --- Favoritos ---
 function obtenerFavoritos() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY_FAVORITOS)) || [];
+  return _leerJSON(STORAGE_KEY_FAVORITOS);
 }
 
 function esFavorito(id) {
@@ -36,11 +45,10 @@ function eliminarDeFavoritos(id) {
 
 // --- Historial ---
 function obtenerHistorial() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORIAL)) || [];
+  return _leerJSON(STORAGE_KEY_HISTORIAL);
 }
 
 function guardarEnHistorial(anime) {
-  // Si ya existía, lo sacamos para moverlo al principio (evita duplicados)
   const historial = obtenerHistorial().filter((item) => String(item.id) !== String(anime.id));
 
   const itemHistorial = {
