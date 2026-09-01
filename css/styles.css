@@ -468,7 +468,6 @@ section{ padding-block:5.12rem; position:relative; }
   margin-block: 2rem 4rem;
 }
 
-
 /* Tablet (48rem - 63.9375rem): 2 o 3 resultados por fila */
 @media (min-width: 48rem) and (max-width: 63.9375rem) {
   .card-grid {
@@ -505,10 +504,13 @@ section{ padding-block:5.12rem; position:relative; }
   aspect-ratio: 2 / 3;
 }
 
+.poster img{
+  transition: transform 0.4s ease;
+}
+
 .anime-card:hover .poster img {
   transform: scale(1.05);
 }
-
 
 .poster::after {
   content: "";
@@ -709,7 +711,7 @@ section{ padding-block:5.12rem; position:relative; }
 }
 .empty-state h3{ font-family:var(--font-body); text-transform:none; font-size:1.84rem; color:var(--paper); }
 
-/* ---------- Página de detalle ---------- */
+/* ---------- Página de detalle (legacy: renderDetalle() usa .detalle-*, no estas clases) ---------- */
 .detail-hero{
   display:grid; grid-template-columns:26rem 1fr; gap:4.16rem;
   padding-block:4.8rem 4rem;
@@ -765,9 +767,6 @@ section{ padding-block:5.12rem; position:relative; }
 .loading::before{
   content:""; width:.96rem; height:.96rem; background:var(--cyan); border-radius:50%;
   animation:blink 1s steps(2) infinite;
-}
-.detail-content {
-  padding-block: 4.16rem;
 }
 
 /* ---------- Modal de preferencias de favorito ---------- */
@@ -853,36 +852,153 @@ section{ padding-block:5.12rem; position:relative; }
 }
 
 /* ---------- Detalle dinámico (renderDetalle) ---------- */
-.detalle-grid{
+.detail-content{
+  position:relative;
+  padding-block:4.16rem;
+}
+
+.detalle-backdrop{
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:44rem;
+  background-size:cover;
+  background-position:center 20%;
+  filter:blur(2rem) brightness(0.4);
+  transform:scale(1.1);
+  z-index:-1;
+}
+
+.detalle-hero{
   display:flex;
   gap:3.2rem;
-  flex-wrap:wrap;
-  align-items:flex-start;
+  align-items:flex-end;
+  min-height:36rem;
+  padding-top:8rem;
 }
-.detalle-poster-col{ flex:0 0 28rem; }
+
+.detalle-hero-info{ flex:1; min-width:28rem; }
+
+.detalle-badges{
+  display:flex;
+  gap:.8rem;
+  flex-wrap:wrap;
+  margin-bottom:1.2rem;
+}
+.badge{
+  font-family:var(--font-mono);
+  font-size:1.2rem;
+  padding:.4rem 1.2rem;
+  border-radius:var(--radius-pill);
+  background:var(--panel);
+  color:var(--fog);
+  border:var(--border-w) solid var(--line);
+}
+.badge-tipo{
+  background:var(--magenta);
+  color:var(--paper);
+  border-color:var(--magenta);
+  text-transform:capitalize;
+}
+
+.detalle-hero-info h1{
+  font-size:clamp(2.8rem,5vw,4.4rem);
+  margin-bottom:.2rem;
+}
+.detalle-titulo-original{
+  font-family:var(--font-mono);
+  font-size:1.36rem;
+  color:var(--fog-dim);
+  margin-bottom:1.6rem;
+}
+
+.detalle-meta-row{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:.8rem;
+  font-family:var(--font-mono);
+  font-size:1.36rem;
+  color:var(--fog);
+  margin-bottom:1.6rem;
+}
+.meta-dot{ color:var(--fog-dim); }
+
+.detalle-tags{
+  display:flex;
+  gap:.56rem;
+  flex-wrap:wrap;
+  margin-bottom:2rem;
+}
+
+.detalle-poster-col{ flex:0 0 24rem; }
+.detalle-poster-col .poster{
+  border-radius:var(--radius-lg);
+  border:var(--border-w) solid var(--line);
+  box-shadow:0 1.6rem 3.2rem rgba(0,0,0,.5);
+}
 .detalle-poster-col .estado{ left:1rem; right:auto; }
 
-.detalle-info{ flex:1; min-width:28rem; }
-.detalle-info h1{ margin-bottom:0.8rem; }
-.detalle-meta{ margin-bottom:1.6rem; font-size:1.76rem; row-gap:0.64rem; }
-.detalle-sinopsis{ line-height:1.6; margin-top:0.8rem; opacity:0.9; }
-
+/* Botón de favoritos: tamaño de contenido en desktop, no ocupa toda la fila */
 .btn-fav-detalle{
-  width:100%;
-  margin-top:1.6rem;
-  padding:1rem;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:fit-content;
+  margin-top:.4rem;
+  padding:1rem 2.4rem;
   color:var(--paper);
   border-radius:var(--radius-sm);
   cursor:pointer;
   font-weight:700;
+  font-size:1.36rem;
   background:var(--panel-hi);
   border:var(--border-w) solid var(--modal-muted);
   transition:background .2s ease, border-color .2s ease;
 }
+
+.btn-fav-detalle:hover {
+  background: var(--panel-hi);
+  border-color: var(--magenta);
+  color: var(--magenta-hover);
+}
+
 .btn-fav-detalle.is-favorito{
   background:var(--accent-red);
   border-color:var(--accent-red);
 }
+
+/* ---------- Grilla de estadísticas ---------- */
+.detalle-stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:1.6rem;
+  margin-top:3.2rem;
+}
+.stat-card{
+  background:var(--panel);
+  border:var(--border-w) solid var(--line);
+  border-radius:var(--radius-md);
+  padding:1.6rem;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+}
+.stat-label{
+  font-family:var(--font-mono);
+  font-size:1.12rem;
+  text-transform:uppercase;
+  color:var(--fog-dim);
+}
+.stat-value{
+  font-size:1.6rem;
+  font-weight:600;
+  color:var(--paper);
+}
+
+/* ---------- Sinopsis ---------- */
+.detalle-sinopsis-box{ margin-top:3.2rem; max-width:70ch; }
+.detalle-sinopsis{ line-height:1.6; opacity:.9; }
 
 /* ---------- Fallback de imagen en el historial ---------- */
 .history-item-fallback{
@@ -927,6 +1043,48 @@ section{ padding-block:5.12rem; position:relative; }
   text-decoration:none;
   color:inherit;
   display:block;
+}
+
+/* ---------- Responsive de la página de detalle ---------- */
+@media (max-width:63.9375rem){
+  .detalle-backdrop{ height:36rem; }
+
+  .detalle-hero{
+    flex-direction:column-reverse;
+    align-items:center;
+    text-align:center;
+    min-height:auto;
+    padding-top:4rem;
+    gap:2.4rem;
+  }
+
+  .detalle-hero-info{ min-width:0; width:100%; }
+
+  .detalle-badges,
+  .detalle-meta-row,
+  .detalle-tags{
+    justify-content:center;
+  }
+
+  .detalle-poster-col{ flex:0 0 auto; width:20rem; }
+
+  .btn-fav-detalle{ margin-inline:auto; }
+}
+
+@media (max-width:47.9375rem){
+  .detalle-backdrop{ height:28rem; }
+
+  .detalle-poster-col{ width:16rem; }
+
+  .detalle-stats-grid{ grid-template-columns:repeat(2, 1fr); }
+
+  .btn-fav-detalle{ width:100%; }
+}
+
+@media (max-width:30rem){
+  .detalle-stats-grid{ grid-template-columns:1fr; }
+
+  .detalle-hero-info h1{ font-size:2.4rem; }
 }
 
 @keyframes blink{ 50%{ opacity:.15; } }

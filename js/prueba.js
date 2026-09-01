@@ -167,42 +167,87 @@ async function initDetalle() {
   }
 }
 
-function renderDetalle(container, anime) {
-  let claseEstado = "finalizada";
-  if (anime.estado === "En emisión") {
-    claseEstado = "emision";
-  } else if (anime.estado === "Próximamente") {
-    claseEstado = "proximamente";
-  }
+function formatearFecha(fechaISO) {
+  if (!fechaISO) return "Sin confirmar";
+  const fecha = new Date(fechaISO);
+  return fecha.toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" });
+}
 
-  const imagenHTML = anime.posterGrande || anime.poster
-    ? `<img src="${anime.posterGrande || anime.poster}" alt="${anime.titulo}">`
+function renderDetalle(container, anime) {
+  const esEmision = anime.estado === "En emisión";
+  const claseEstado = esEmision ? "emision" : "finalizada";
+  const imagenPoster = anime.posterGrande || anime.poster;
+  const imagenHTML = imagenPoster
+    ? `<img src="${imagenPoster}" alt="${anime.titulo}">`
     : `<span class="inicial">${anime.titulo.charAt(0)}</span>`;
 
   const yaEsFav = esFavorito(String(anime.id));
   const claseBtnFav = yaEsFav ? "btn-fav-detalle is-favorito" : "btn-fav-detalle";
   const textoBtnFav = yaEsFav ? "♥ Quitar de Favoritos" : "♡ Agregar a Favoritos";
 
+  const anio = anime.startDate ? anime.startDate.slice(0, 4) : "N/C";
+
+  const tagsGeneroHTML = anime.generos.length
+    ? anime.generos.map((g) => `<span class="tag">${g}</span>`).join("")
+    : "";
+
   container.innerHTML = `
-    <div class="detalle-grid">
+    <div class="detalle-backdrop" style="background-image:url('${imagenPoster}')"></div>
+
+    <div class="detalle-hero">
+      <div class="detalle-hero-info">
+        <div class="detalle-badges">
+          <span class="badge">${anio}</span>
+          <span class="badge">${anime.estado}</span>
+          <span class="badge badge-tipo">${anime.showType.toLowerCase()}</span>
+        </div>
+
+        <h1>${anime.titulo}</h1>
+        ${anime.tituloOriginal ? `<p class="detalle-titulo-original">${anime.tituloOriginal}</p>` : ""}
+
+        <div class="detalle-meta-row">
+          <span>${anime.duracionMin} min por ep</span>
+          <span class="meta-dot">•</span>
+          <span>${anime.episodios} episodios</span>
+          <span class="meta-dot">•</span>
+          <span class="stars">★ ${anime.rating}</span>
+        </div>
+
+        ${tagsGeneroHTML ? `<div class="detalle-tags">${tagsGeneroHTML}</div>` : ""}
+
+        <button id="btn-fav" class="${claseBtnFav}">${textoBtnFav}</button>
+      </div>
+
       <div class="detalle-poster-col">
         <div class="poster">
           ${imagenHTML}
           <span class="estado ${claseEstado}">${anime.estado}</span>
         </div>
-        <button id="btn-fav" class="${claseBtnFav}">${textoBtnFav}</button>
       </div>
-      <div class="detalle-info">
-        <h1>${anime.titulo}</h1>
-        <div class="card-meta detalle-meta">
-          <span class="stars">★ ${anime.rating}</span>
-          <span>Episodios: ${anime.episodios}</span>
-          <span>Duración: ${anime.duracionMin} min</span>
-          <span>Tipo: ${anime.showType}</span>
-        </div>
-        <h3>Sinopsis</h3>
-        <p class="detalle-sinopsis">${anime.sinopsis}</p>
+    </div>
+
+    <div class="detalle-stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Fecha de estreno</span>
+        <span class="stat-value">${formatearFecha(anime.startDate)}</span>
       </div>
+      <div class="stat-card">
+        <span class="stat-label">Duración por episodio</span>
+        <span class="stat-value">${anime.duracionMin} min</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Tipo</span>
+        <span class="stat-value">${anime.showType || "N/C"}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Estado</span>
+        <span class="stat-value">${anime.estado}</span>
+      </div>
+    </div>
+
+    <div class="detalle-sinopsis-box">
+      <h2>Sinopsis</h2>
+      <p class="detalle-sinopsis">${anime.sinopsis}</p>
     </div>
   `;
 }

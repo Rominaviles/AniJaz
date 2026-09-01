@@ -40,7 +40,6 @@ function obtenerHistorial() {
 }
 
 function guardarEnHistorial(anime) {
-  // Si ya existía, lo sacamos para moverlo al principio (evita duplicados)
   const historial = obtenerHistorial().filter((item) => String(item.id) !== String(anime.id));
 
   const itemHistorial = {

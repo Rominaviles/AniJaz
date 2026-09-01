@@ -7,21 +7,21 @@ async function getHomeData() {
     const [emisionRes, destacadosRes, proximosRes] = await Promise.all([
       fetchAnimeEmision(),
       fetchAnimeDestacados(),
-      fetchAnimeProximos() 
+      fetchAnimeProximos()
     ]);
 
-    const emisionRaw = mapearListaAnimes(emisionRes.data || []);
-    const destacadosRaw = mapearListaAnimes(destacadosRes.data || []);
-    const proximosRaw = mapearListaAnimes(proximosRes.data || []); 
+    const emisionRaw = mapearListaAnimes(emisionRes);
+    const destacadosRaw = mapearListaAnimes(destacadosRes);
+    const proximosRaw = mapearListaAnimes(proximosRes);
 
     return {
       emision: emisionRaw.slice(0, 4),
       destacados: destacadosRaw.slice(0, 4),
-      proximos: proximosRaw.slice(0, 4) 
+      proximos: proximosRaw.slice(0, 4)
     };
   } catch (error) {
     console.error("Error en getHomeData:", error);
-    return { emision: [], destacados: [], proximos: [] }; 
+    return { emision: [], destacados: [], proximos: [] };
   }
 }
 
@@ -44,7 +44,7 @@ async function getAnimeDetalle(id) {
     const res = await fetchAnimePorId(id);
     if (!res || !res.data) return null;
 
-    const anime = mapearAnime(res.data);
+    const anime = mapearAnime(res.data, res.included || []);
     anime.sinopsis = await traducirTexto(anime.sinopsis);
 
     return anime;
