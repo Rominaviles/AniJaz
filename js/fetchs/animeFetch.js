@@ -4,22 +4,10 @@
 
 const BASE_URL = "https://kitsu.io/api/edge";
 
-async function fetchFromApi(endpoint, { timeoutMs = 8000 } = {}) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, { signal: controller.signal });
-    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    if (error.name === "AbortError") {
-      throw new Error(`Timeout: la petición a ${endpoint} tardó demasiado`);
-    }
-    throw error;
-  } finally {
-    clearTimeout(timeoutId);
-  }
+async function fetchFromApi(endpoint) {
+  const response = await fetch(`${BASE_URL}${endpoint}`);
+  if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+  return await response.json();
 }
 
 async function fetchAnimeEmision() {

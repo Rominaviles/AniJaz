@@ -41,12 +41,27 @@ async function initHome() {
   if (gridDestacados) gridDestacados.innerHTML = "<div class='loading'>Cargando destacados...</div>";
   if (gridProximos) gridProximos.innerHTML = "<div class='loading'>Cargando proximos...</div>";
 
-  const { emision, destacados, proximos } = await getHomeData();
+  try {
+    const { emision, destacados, proximos } = await fetchDatosIndex();
 
-  if (gridEmision) renderCards(gridEmision, emision);
-  if (gridDestacados) renderCards(gridDestacados, destacados);
-  if (gridProximos) renderCards(gridProximos, proximos);
+    const emisionMapeada = mapearListaAnimes(emision);
+    const destacadosMapeados = mapearListaAnimes(destacados);
+    const proximosMapeados = mapearListaAnimes(proximos);
+
+    if (gridEmision) renderCards(gridEmision, emisionMapeada);
+    if (gridDestacados) renderCards(gridDestacados, destacadosMapeados);
+    if (gridProximos) renderCards(gridProximos, proximosMapeados);
+  } catch (error) {
+    console.error("Error cargando el home:", error);
+    const mensaje = `<div class='error'>Error al cargar: ${error.message}</div>`;
+    if (gridEmision) gridEmision.innerHTML = mensaje;
+    if (gridDestacados) gridDestacados.innerHTML = mensaje;
+    if (gridProximos) gridProximos.innerHTML = mensaje;
+  }
 }
+
+
+document.addEventListener("DOMContentLoaded", initHome);
 
 async function initCatalogo() {
   const container = document.getElementById("grid-catalogo");

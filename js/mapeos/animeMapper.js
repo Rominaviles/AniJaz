@@ -51,7 +51,6 @@ function mapearAnime(item, included = []) {
   };
 }
 
-
 function mapearListaAnimes(input) {
   if (!input) return [];
 
@@ -61,9 +60,9 @@ function mapearListaAnimes(input) {
   if (input.data && Array.isArray(input.data)) {
     datosReales = input.data;
     included = input.included || [];
-  } 
-  else if (Array.isArray(input)) {
+  } else if (Array.isArray(input)) {
     datosReales = input;
   }
-  return datosReales.map(item => mapearAnime(item, included));
+
+  return datosReales.map((item) => mapearAnime(item, included));
 }
