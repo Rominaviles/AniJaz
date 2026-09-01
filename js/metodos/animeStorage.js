@@ -1,8 +1,3 @@
-// ==========================================
-// ALMACENAMIENTO (Favoritos e Historial en LocalStorage)
-// Funciones de datos puras: no tocan el DOM.
-// ==========================================
-
 const STORAGE_KEY_FAVORITOS = "anidrex_favoritos";
 const STORAGE_KEY_HISTORIAL = "anidrex_historial";
 

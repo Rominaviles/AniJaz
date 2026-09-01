@@ -1,6 +1,3 @@
-// ==========================================
-// FILTROS (sobre listas ya mapeadas, en memoria)
-// ==========================================
 
 function filtrarSoloSeriesEnEmision(listaMapeada) {
   return listaMapeada.filter((anime) => anime.estado === "En emisión");

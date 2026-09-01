@@ -1,6 +1,3 @@
-// ==========================================
-// FETCH (Peticiones a la API de Kitsu)
-// ==========================================
 
 const BASE_URL = "https://kitsu.io/api/edge";
 

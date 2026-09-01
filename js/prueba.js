@@ -1,6 +1,3 @@
-// ==========================================
-// INICIALIZACIÓN Y RENDERIZADO (DOM/UI)
-// ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
   setupSearchForms();

@@ -1,6 +1,3 @@
-// ==========================================
-// SERVICIOS (orquestan fetch + mapeo + filtros)
-// ==========================================
 
 async function getHomeData() {
   try {

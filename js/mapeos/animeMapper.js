@@ -1,6 +1,3 @@
-// ==========================================
-// MAPEO (Transformación de datos crudos de la API)
-// ==========================================
 
 function mapearAnime(item, included = []) {
   if (!item) return {};
