@@ -502,3 +502,15 @@ function renderPaginacion(paginaActual, totalPaginas) {
 
   contenedor.innerHTML = `${botonAnterior}${numeros}${botonSiguiente}`;
 }
+
+function inicializarNav() {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".nav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const abierto = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(abierto));
+    });
+  }
+}
+document.addEventListener('DOMContentLoaded', inicializarNav);

@@ -535,7 +535,7 @@ section{ padding-block:3.2rem; position:relative; }
     border-top:0.0625rem solid var(--line);
     margin-top:.7rem; padding-top:.6rem;
   }
-  .nav.open{ display:flex; }
+  .nav.open{ display:flex; text-align: right;}
   .nav a{ padding-block:.65rem; border-bottom:0.0625rem solid var(--line); }
 }
 
@@ -617,24 +617,6 @@ section{ padding-block:3.2rem; position:relative; }
   color:var(--fog-dim);
   font-family:var(--font-mono);
   padding-inline:.25rem;
-}/* ---------- Botón limpiar filtros ---------- */
-.btn-limpiar-catalogo{
-  background:transparent;
-  color:var(--fog);
-  border:0.0625rem solid var(--line);
-  font-family:var(--font-mono);
-  font-weight:700;
-  font-size:.85rem;
-  padding:0 1.6rem;
-  border-radius:var(--radius-sm);
-  height:2.375rem;
-  cursor:pointer;
-  white-space:nowrap;
-  transition:border-color .2s ease, color .2s ease;
-}
-.btn-limpiar-catalogo:hover{
-  border-color:var(--cyan);
-  color:var(--cyan);
 }
 
 /* ---------- Paginación ---------- */
