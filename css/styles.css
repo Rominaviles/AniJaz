@@ -998,8 +998,12 @@ section{ padding-block:5.12rem; position:relative; }
 }
 
 /* ---------- Sinopsis ---------- */
-.detalle-sinopsis-box{ margin-top:3.2rem; max-width:70ch; }
-.detalle-sinopsis{ line-height:1.6; opacity:.9; }
+.detalle-sinopsis-box{ margin-top:3.2rem; width:100%; }
+.detalle-sinopsis{
+  line-height:1.7;
+  color:var(--fog);
+  opacity:.95;
+}
 
 /* ---------- Fallback de imagen en el historial ---------- */
 .history-item-fallback{
