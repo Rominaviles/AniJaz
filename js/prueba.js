@@ -95,7 +95,7 @@ async function initCatalogo() {
   if (selectEstado) selectEstado.value = filtros.estado;
   if (selectOrden) selectOrden.value = filtros.orden;
 
-  const totalPaginas = Math.max(1, Math.ceil(total / 20));
+  const totalPaginas = Math.max(1, Math.ceil(total / 10));
   renderPaginacion(filtros.pagina, totalPaginas);
 }
 

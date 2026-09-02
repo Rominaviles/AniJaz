@@ -36,12 +36,12 @@ let _cacheGeneros = null;
 
 async function fetchGeneros() {
   if (_cacheGeneros) return _cacheGeneros;
-  _cacheGeneros = await fetchFromApi(`/categories?page[limit]=40&sort=title`);
+  _cacheGeneros = await fetchFromApi(`/categories?page[limit]=1000&sort=title`);
   return _cacheGeneros;
 }
 
 function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada = "", anio = "", orden = "", pagina = 1 } = {}) {
-  const LIMITE = 20;
+  const LIMITE = 10;
   const offset = (pagina - 1) * LIMITE;
   const params = new URLSearchParams();
 
