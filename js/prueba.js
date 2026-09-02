@@ -207,6 +207,10 @@ function renderDetalle(container, anime) {
   container.innerHTML = `
     <div class="detalle-backdrop" style="background-image:url('${imagenPoster}')"></div>
 
+    <a href="catalogo.html" class="btn-volver-backdrop">
+      <span class="flecha">«</span> Volver al catálogo
+    </a>
+
     <div class="detalle-hero">
       <div class="detalle-hero-info">
         <div class="detalle-badges">
