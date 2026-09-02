@@ -618,7 +618,7 @@ section{ padding-block:5.12rem; position:relative; }
 
 /* ---------- Página catálogo ---------- */
 .filters{
-  display:flex; gap:1.6rem; flex-wrap:nowrap; align-items:flex-end; /* CAMBIADO: nowrap en vez de wrap */
+  display:flex; gap:1.6rem; flex-wrap:nowrap; align-items:flex-end; 
   background:var(--night-900); border:var(--border-w) solid var(--line); border-radius:var(--radius-lg);
   padding:2.08rem; margin-bottom:3.2rem;
 }
