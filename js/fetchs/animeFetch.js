@@ -41,7 +41,7 @@ async function fetchGeneros() {
 }
 
 function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada = "", anio = "", orden = "", pagina = 1 } = {}) {
-  const LIMITE = 20;
+  const LIMITE = 10;
   const offset = (pagina - 1) * LIMITE;
   const params = new URLSearchParams();
 
