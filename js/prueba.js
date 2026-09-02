@@ -93,9 +93,10 @@ async function initCatalogo() {
   if (selectGenero) selectGenero.value = filtros.genero;
   if (selectTemporada) selectTemporada.value = filtros.temporada;
   if (selectEstado) selectEstado.value = filtros.estado;
-  if (selectOrden) selectOrden.value = filtros.orden;
-
-  const totalPaginas = Math.max(1, Math.ceil(total / 20));
+  if (selectOrden) {
+    selectOrden.value = filtros.orden || "-userCount";
+  }
+  const totalPaginas = Math.max(1, Math.ceil(total / 10));
   renderPaginacion(filtros.pagina, totalPaginas);
 }
 
