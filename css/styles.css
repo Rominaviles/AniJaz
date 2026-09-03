@@ -1129,6 +1129,101 @@ section{ padding-block:5.12rem; position:relative; }
 
 @keyframes blink{ 50%{ opacity:.15; } }
 
+/* ---------- SECCIÓN DE CONTACTO ---------- */
+.contacto-section {
+  padding-block: 6rem;
+}
+
+.contacto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: stretch;
+}
+
+.contacto-info-box {
+  background: var(--night-900);
+  border: var(--border-w) solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contacto-info-box h1 {
+  font-size: 4.8rem;
+  margin-bottom: 1.6rem;
+}
+
+.contacto-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  margin-top: 3.2rem;
+}
+
+.contacto-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.6rem;
+}
+
+.contacto-icon {
+  font-size: 2.4rem;
+  background: var(--magenta-dim);
+  color: var(--magenta);
+  padding: 0.8rem;
+  border-radius: var(--radius-md);
+  line-height: 1;
+}
+
+.contacto-item h3 {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  color: var(--cyan);
+  margin: 0 0 0.4rem 0;
+}
+
+.contacto-item p, 
+.contacto-item a {
+  margin: 0;
+  color: var(--fog);
+}
+
+.contacto-item a:hover {
+  color: var(--fog-dim);
+}
+
+.contacto-map-box {
+  border: var(--border-w) solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 44rem;
+  background: var(--night-900);
+}
+
+.mapa-unaj {
+  filter: grayscale(0.2) invert(0.9) hue-rotate(180deg);
+  transition: filter 0.3s ease;
+}
+
+.mapa-unaj:hover {
+  filter: none; 
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contacto-grid {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+  .contacto-info-box {
+    padding: 2.4rem;
+  }
+}
+
+
 /* ---------- footer ---------- */
 .site-footer{ border-top:var(--border-w) solid var(--line); padding-block:4.16rem; margin-top:3.2rem; }
 .footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.6rem; align-items:center; }

@@ -583,3 +583,4 @@ function renderPaginacion(paginaActual, totalPaginas) {
 
   contenedor.innerHTML = `${botonAnterior}${numeros}${botonSiguiente}`;
 }
+
