@@ -1129,15 +1129,17 @@ section{ padding-block:5.12rem; position:relative; }
 
 @keyframes blink{ 50%{ opacity:.15; } }
 
-/* ---------- SECCIÓN DE CONTACTO ---------- */
+/* ---------- SECCIÓN DE CONTACTO---------- */
+
 .contacto-section {
-  padding-block: 6rem;
+  padding-block: 4rem; 
+  width: 100%;
 }
 
 .contacto-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 3rem;
   align-items: stretch;
 }
 
@@ -1145,22 +1147,22 @@ section{ padding-block:5.12rem; position:relative; }
   background: var(--night-900);
   border: var(--border-w) solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 4rem;
+  padding: 3rem; 
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .contacto-info-box h1 {
-  font-size: 4.8rem;
-  margin-bottom: 1.6rem;
+  font-size: 4rem; 
+  margin-bottom: 1.2rem;
 }
 
 .contacto-detalles {
   display: flex;
   flex-direction: column;
-  gap: 2.4rem;
-  margin-top: 3.2rem;
+  gap: 2rem;
+  margin-top: 2.4rem;
 }
 
 .contacto-item {
@@ -1170,7 +1172,7 @@ section{ padding-block:5.12rem; position:relative; }
 }
 
 .contacto-icon {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   background: var(--magenta-dim);
   color: var(--magenta);
   padding: 0.8rem;
@@ -1180,7 +1182,7 @@ section{ padding-block:5.12rem; position:relative; }
 
 .contacto-item h3 {
   font-family: var(--font-mono);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--cyan);
   margin: 0 0 0.4rem 0;
 }
@@ -1199,11 +1201,15 @@ section{ padding-block:5.12rem; position:relative; }
   border: var(--border-w) solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  min-height: 44rem;
+  min-height: 38rem; 
+  height: 100%;
   background: var(--night-900);
 }
 
 .mapa-unaj {
+  width: 100%;
+  height: 100%;
+  border: 0;
   filter: grayscale(0.2) invert(0.9) hue-rotate(180deg);
   transition: filter 0.3s ease;
 }
@@ -1213,16 +1219,21 @@ section{ padding-block:5.12rem; position:relative; }
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 76.8rem) {
+  .contacto-section {
+    padding-block: 2.4rem;
+  }
   .contacto-grid {
     grid-template-columns: 1fr;
-    gap: 2.4rem;
+    gap: 2rem;
   }
   .contacto-info-box {
-    padding: 2.4rem;
+    padding: 2rem;
+  }
+  .contacto-map-box {
+    min-height: 30rem; 
   }
 }
-
 
 /* ---------- footer ---------- */
 .site-footer{ border-top:var(--border-w) solid var(--line); padding-block:4.16rem; margin-top:3.2rem; }
