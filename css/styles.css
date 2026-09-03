@@ -49,7 +49,7 @@
 }
 
 /* ============================================================
-  BASE
+   RESET / BASE
    ============================================================ */
 *,*::before,*::after{ box-sizing:border-box; }
 
@@ -120,7 +120,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* ============================================================
-   NAVEGACIÓN 
+   NAVEGACIÓN
    ============================================================ */
 .site-header{
   position:sticky; top:0; z-index:80;
@@ -453,7 +453,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: var(--gold);
 }
 
-/* Fallback de imagen en el historial */
 .history-item-fallback{
   width:4.2rem;
   height:5.6rem;
@@ -619,7 +618,6 @@ section{ padding-block:5.12rem; position:relative; }
   padding:.24rem .88rem;
 }
 
-/* Etiqueta de favorito personalizada en tarjetas */
 .card-tag-extra{
   font-size:1.2rem;
   background:var(--panel-hi);
@@ -628,7 +626,6 @@ section{ padding-block:5.12rem; position:relative; }
   margin-top:0.6rem;
 }
 
-/* Botón eliminar sobre la tarjeta de favoritos */
 .btn-eliminar-fav{
   position:absolute;
   top:0.8rem;

@@ -61,19 +61,29 @@ function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada
   return fetchFromApi(`/anime?${params.toString()}`);
 }
 
-// Api Google
+// Mymemory
 const _cacheTraducciones = new Map();
+
+async function traducirChunk(chunk) {
+  const res = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|es`
+  );
+  if (!res.ok) throw new Error(`Traducción falló: ${res.status}`);
+  const data = await res.json();
+  return data.responseData?.translatedText ?? chunk;
+}
 
 async function traducirTexto(texto) {
   if (!texto || texto === "Sin sinopsis disponible.") return texto;
   if (_cacheTraducciones.has(texto)) return _cacheTraducciones.get(texto);
 
   try {
-    const res = await fetch(
-      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q=${encodeURIComponent(texto)}`
-    );
-    const data = await res.json();
-    const traducido = data[0].map((item) => item[0]).join("");
+    const chunks = splitTextForTranslation(texto); 
+    const traducidos = [];
+    for (const chunk of chunks) {
+      traducidos.push(await traducirChunk(chunk));
+    }
+    const traducido = traducidos.join(" ");
     _cacheTraducciones.set(texto, traducido);
     return traducido;
   } catch (error) {
