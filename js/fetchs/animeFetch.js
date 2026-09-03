@@ -36,7 +36,7 @@ let _cacheGeneros = null;
 
 async function fetchGeneros() {
   if (_cacheGeneros) return _cacheGeneros;
-  _cacheGeneros = await fetchFromApi(`/categories?page[limit]=40&sort=title`);
+  _cacheGeneros = await fetchFromApi(`/categories?page[limit]=10000&sort=title`);
   return _cacheGeneros;
 }
 

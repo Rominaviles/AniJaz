@@ -65,6 +65,7 @@ async function initCatalogo() {
   if (!container) return;
 
   const params = new URLSearchParams(window.location.search);
+  
   const filtros = {
     busqueda: params.get("busqueda") || "",
     genero: params.get("genero") || "",
@@ -119,11 +120,12 @@ function setupFiltrosForm() {
     const orden = form.querySelector(".select-orden")?.value;
     const anio = form.querySelector(".select-anio")?.value;
 
-    if (anio) nuevosParams.set("anio", anio);
+    
     if (genero) nuevosParams.set("genero", genero);
     if (temporada) nuevosParams.set("temporada", temporada);
     if (estado) nuevosParams.set("estado", estado);
     if (orden) nuevosParams.set("orden", orden);
+    if (anio) nuevosParams.set("anio", anio);
 
     window.location.href = `catalogo.html?${nuevosParams.toString()}`;
   });
@@ -546,6 +548,7 @@ function construirUrlConPagina(pagina) {
 }
 
 function renderPaginacion(paginaActual, totalPaginas) {
+  
   const contenedor = document.getElementById("paginacion-catalogo");
   if (!contenedor) return;
 
