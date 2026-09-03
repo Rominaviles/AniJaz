@@ -618,13 +618,15 @@ section{ padding-block:5.12rem; position:relative; }
 
 /* ---------- Página catálogo ---------- */
 .filters{
-  display:flex; gap:1.6rem; flex-wrap:nowrap; align-items:flex-end; 
+  display:flex; gap:1.6rem; flex-wrap:wrap; align-items:flex-end; 
   background:var(--night-900); border:var(--border-w) solid var(--line); border-radius:var(--radius-lg);
   padding:2.08rem; margin-bottom:3.2rem;
 }
 
-.field-btn {
-  flex-grow: 0;
+.field-btn{
+  flex:0 0 auto;
+  min-width:auto;
+  max-width:none;
 }
 
 .btn-filtrar-catalogo,
@@ -637,6 +639,24 @@ section{ padding-block:5.12rem; position:relative; }
 
 .btn-filtrar-catalogo{
   width: auto;
+}
+
+@media (max-width: 47.9375rem) {
+  .filters{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .field-inline{
+    max-width:none;
+    width:100%;
+  }
+  .field-btn{
+    width:100%;
+  }
+  .btn-filtrar-catalogo,
+  .btn-limpiar-catalogo{
+    width:100%;
+  }
 }
 
 .btn-limpiar-catalogo{
@@ -692,7 +712,14 @@ section{ padding-block:5.12rem; position:relative; }
   padding-inline:.4rem;
 }
 
-.field-inline{ display:flex; flex-direction:column; gap:.56rem; min-width:15rem; }
+.field-inline{
+  display:flex;
+  flex-direction:column;
+  gap:.56rem;
+  flex:1 1 12rem;
+  min-width:12rem;
+  max-width:18rem;
+}
 .field-inline label{
   font-family:var(--font-mono); font-size:1.056rem; text-transform:uppercase;
   letter-spacing:.06em; color:var(--fog-dim);
@@ -700,7 +727,9 @@ section{ padding-block:5.12rem; position:relative; }
 .field-inline select, .field-inline input{
   background:var(--panel); border:var(--border-w) solid var(--line); color:var(--paper);
   font-family:var(--font-body); font-size:1.408rem; padding:.88rem 1.12rem; border-radius:var(--radius-sm);
+  width:100%;
 }
+
 .results-count{
   font-family:var(--font-mono); font-size:1.248rem; color:var(--fog-dim);
   margin-bottom:1.92rem;
