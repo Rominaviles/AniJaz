@@ -623,10 +623,8 @@ section{ padding-block:5.12rem; position:relative; }
   padding:2.08rem; margin-bottom:3.2rem;
 }
 
-.field-btn{
-  flex:0 0 auto;
-  min-width:auto;
-  max-width:none;
+.field-btn {
+  flex-grow: 0;
 }
 
 .btn-filtrar-catalogo,
@@ -639,24 +637,6 @@ section{ padding-block:5.12rem; position:relative; }
 
 .btn-filtrar-catalogo{
   width: auto;
-}
-
-@media (max-width: 47.9375rem) {
-  .filters{
-    flex-direction:column;
-    align-items:stretch;
-  }
-  .field-inline{
-    max-width:none;
-    width:100%;
-  }
-  .field-btn{
-    width:100%;
-  }
-  .btn-filtrar-catalogo,
-  .btn-limpiar-catalogo{
-    width:100%;
-  }
 }
 
 .btn-limpiar-catalogo{
