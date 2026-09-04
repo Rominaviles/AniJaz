@@ -101,10 +101,10 @@ async function initCatalogo() {
   try {
       const { animes, total } = await getCatalogoData(filtros);
 
-if (!animes || animes.length === 0) {
+      if (!animes || animes.length === 0) {
         throw new Error("No hay datos disponibles sin conexión");
       }
-
+      
       renderCards(container, animes);
 
       const selectGenero = document.querySelector(".select-genero");
