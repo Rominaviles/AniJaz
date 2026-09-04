@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIJAZ — Tu Guía y Organizador de Anime</title>
+    <meta name="description" content="Descubrí, organizá y seguí tus series de anime favoritas en un solo lugar.">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container nav-bar">
+            <a href="index.html" class="logo"><span class="dex">ANI</span>JAZ <span class="tag">Organizador</span></a>
+
+            <form class="nav-search" data-nav-search>
+                <input type="search" name="busqueda" placeholder="Buscar un anime…" aria-label="Buscar anime">
+                <button type="submit">Buscar</button>
+            </form>
+
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">☰</button>
+
+            <nav id="main-nav" class="nav" aria-label="Principal">
+                <a href="index.html">Inicio</a>
+                <a href="catalogo.html">Catálogo</a>
+                <a href="favoritos.html">Mis Favoritos</a>
+                <a href="contacto.html">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="contacto-section">
+            <div class="contacto-grid">
+
+                <div class="contacto-info-box">
+                    <div class="eyebrow">Desarrollo</div>
+                    <h1>ANIJAZ Studio</h1>
+                    <p class="lead">Plataforma independiente dedicada a la organización y catálogo de contenido
+                        multimedia de anime.</p>
+
+                    <div class="contacto-detalles">
+                        <div class="contacto-item">
+                            <span class="contacto-icon">📍</span>
+                            <div>
+                                <h3>Ubicación</h3>
+                                <p><a href="https://www.google.com/maps/place/Universidad+Nacional+Arturo+Jauretche/@-34.7891389,-58.2964042,14z/data=!4m10!1m2!2m1!1sunaj!3m6!1s0x95a32eb0350b768f:0xbd0aa21eac3ef032!8m2!3d-34.7747628!4d-58.2675846!15sCgR1bmFqWgYiBHVuYWqSARFwdWJsaWNfdW5pdmVyc2l0eZoBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VSbGIzWlVibEJSRUFF4AEA-gEECBUQOw!16s%2Fg%2F120m0nnk?entry=ttu&g_ep=EgoyMDI2MDgzMS4wIKXMDSoASAFQAw%3D%3D"
+                                        target="_blank" rel="noopener noreferrer"> Calchaquí 6200, Florencio Varela,
+                                        Buenos Aires (UNAJ)</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contacto-item">
+                            <span class="contacto-icon">✉️</span>
+                            <div>
+                                <h3>Correo de Ingeniería Informatica</h3>
+                                <p><a href="mailto:ing.informaticaunaj@gmail.com">ing.informaticaunaj@gmail.com</a></p>
+                            </div>
+                        </div>
+                        <div class="contacto-item">
+                            <span class="contacto-icon">🌐</span>
+                            <div>
+                                <h3>Página Institucional</h3>
+                                <p><a href="https://unaj.edu.ar" target="_blank" rel="noopener noreferrer">www.unaj.edu.ar</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contacto-map-box">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3277.2389909846365!2d-58.27016488832664!3d-34.77475836643901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a32eb0350b768f%3A0xbd0aa21eac3ef032!2sUniversidad%20Nacional%20Arturo%20Jauretche!5e0!3m2!1ses-419!2sar!4v1788450005015!5m2!1ses-419!2sar"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin" class="mapa-unaj">
+                    </iframe>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-row">
+            <p>&copy; 2026 ANIJAZ — Tu guía y organizador de anime.</p>
+            <p><a href="index.html">Volver al inicio →</a></p>
+        </div>
+    </footer>
+
+    <script src="js/fetchs/animeFetch.js"></script>
+    <script src="js/mapeos/animeMapper.js"></script>
+    <script src="js/metodos/animeFilter.js"></script>
+    <script src="js/metodos/animeStorage.js"></script>
+    <script src="js/services/animeService.js"></script>
+    <script src="js/prueba.js"></script>
+
+</body>
+
+</html>
