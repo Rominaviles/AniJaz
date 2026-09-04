@@ -159,11 +159,17 @@ async function initDetalle() {
   container.innerHTML = "<div class='loading'>Consultando…</div>";
 
   try {
+
+    const sinopsisGuardada = obtenerSinopsisGuardada(animeId);
     const anime = await getAnimeDetalle(animeId);
 
     if (!anime) {
       container.innerHTML = "<p class='empty-history'>No se encontró la información de este anime.</p>";
       return;
+    }
+
+    if (sinopsisGuardada && !anime.sinopsis) {
+      anime.sinopsis = sinopsisGuardada;
     }
 
     guardarEnHistorial(anime);
