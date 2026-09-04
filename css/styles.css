@@ -1046,12 +1046,6 @@ section{ padding-block:5.12rem; position:relative; }
   letter-spacing: 0.04em;
 }
 
-.form-help {
-  font-size: 1.1rem;
-  color: var(--fog-dim);
-  margin-top: 0.2rem;
-}
-
 .puntuacion-container {
   display: flex;
   align-items: center;
@@ -1408,8 +1402,10 @@ section{ padding-block:5.12rem; position:relative; }
 
   .detalle-stats-grid{ grid-template-columns:repeat(2, 1fr); }
 
-  .favorito-panel-content {
-    padding: 1.6rem;
+.favorito-panel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .panel-header h3 {
@@ -1426,12 +1422,17 @@ section{ padding-block:5.12rem; position:relative; }
   }
 
   .form-actions {
-    flex-direction: column;
+    display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1.2rem;
+  width: 100%;
   }
 
   .form-actions .btn {
-    width: 100%;
+    width: auto;
     justify-content: center;
+    min-width: 10rem;
   }
 
   .favorito-actions-wrapper {

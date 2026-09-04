@@ -243,10 +243,10 @@ function renderDetalle(container, anime) {
         <div id="panel-favorito" class="favorito-panel" style="display: none;">
           <div class="favorito-panel-content">
             <div class="panel-header">
-              <h3>⭐ Detalles de tu favorito</h3>
+              <h3>⭐ Personalizar</h3>
               <button type="button" id="btn-cerrar-panel" class="panel-close">✕</button>
             </div>
-            <p class="panel-sub">Compartí tu opinión (todo es opcional)</p>
+            <p class="panel-sub">Guarda tus propios comentarios sobre este anime</p>
 
             <form id="form-favorito" class="favorito-form" novalidate>
               <!-- Puntuación -->
@@ -263,7 +263,6 @@ function renderDetalle(container, anime) {
                   <span>🤩</span>
                   <span>🔥</span>
                 </div>
-                <small class="form-help">¿Qué nota le pondrías? (0 = sin calificar)</small>
               </div>
 
               <!-- Estado de seguimiento -->
@@ -291,7 +290,7 @@ function renderDetalle(container, anime) {
               <!-- Acciones -->
               <div class="form-actions">
                 <button type="button" id="btn-cerrar-panel-2" class="btn btn-outline">Cancelar</button>
-                <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                <button type="submit" class="btn btn-primary"> Guardar</button>
               </div>
             </form>
           </div>
