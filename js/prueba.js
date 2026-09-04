@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   setupSearchForms();
 
@@ -57,9 +56,6 @@ async function initHome() {
   }
 }
 
-
-document.addEventListener("DOMContentLoaded", initHome);
-
 async function initCatalogo() {
   const container = document.getElementById("grid-catalogo");
   if (!container) return;
@@ -75,7 +71,6 @@ async function initCatalogo() {
     pagina: parseInt(params.get("pagina"), 10) || 1,
     anio: params.get("anio") || ""
   };
-  
 
   const inputSearch = document.querySelector('.nav-search input[name="busqueda"]');
   if (inputSearch && filtros.busqueda) inputSearch.value = filtros.busqueda;
@@ -120,7 +115,6 @@ function setupFiltrosForm() {
     const orden = form.querySelector(".select-orden")?.value;
     const anio = form.querySelector(".select-anio")?.value;
 
-    
     if (genero) nuevosParams.set("genero", genero);
     if (temporada) nuevosParams.set("temporada", temporada);
     if (estado) nuevosParams.set("estado", estado);
@@ -146,9 +140,9 @@ function setupLimpiarFiltros() {
   });
 }
 
-// ==========================================
-// DETALLE (Página detalle.html)
-// ==========================================
+// ============================================================
+// DETALLE
+// ============================================================
 
 async function initDetalle() {
   const container = document.getElementById("detalle-contenido");
@@ -174,7 +168,10 @@ async function initDetalle() {
 
     guardarEnHistorial(anime);
     renderDetalle(container, anime);
-    setupModalFavoritos(anime);
+    
+    requestAnimationFrame(() => {
+      setupFavoritoPanel(anime);
+    });
 
   } catch (error) {
     console.error("Error al inicializar el detalle:", error);
@@ -234,9 +231,74 @@ function renderDetalle(container, anime) {
 
         ${tagsGeneroHTML ? `<div class="detalle-tags">${tagsGeneroHTML}</div>` : ""}
 
-        <button id="btn-fav" class="${claseBtnFav}">${textoBtnFav}</button>
+        <!-- BOTÓN CON FLECHA -->
+        <div class="favorito-actions-wrapper">
+          <button id="btn-fav" class="${claseBtnFav}">${textoBtnFav}</button>
+          <button id="btn-toggle-panel" class="btn-toggle-panel" aria-label="Abrir detalles" title="Detalles del favorito">
+            ▼
+          </button>
+        </div>
+
+        <!-- PANEL DESPLEGABLE -->
+        <div id="panel-favorito" class="favorito-panel" style="display: none;">
+          <div class="favorito-panel-content">
+            <div class="panel-header">
+              <h3>⭐ Detalles de tu favorito</h3>
+              <button type="button" id="btn-cerrar-panel" class="panel-close">✕</button>
+            </div>
+            <p class="panel-sub">Compartí tu opinión (todo es opcional)</p>
+
+            <form id="form-favorito" class="favorito-form" novalidate>
+              <!-- Puntuación -->
+              <div class="form-group">
+                <label for="fav-puntuacion" class="form-label">🎯 Tu puntuación</label>
+                <div class="puntuacion-container">
+                  <input type="range" id="fav-puntuacion" name="puntuacion" min="0" max="10" step="0.5" value="0" 
+                         class="puntuacion-slider">
+                  <span id="puntuacion-valor" class="puntuacion-valor">—</span>
+                </div>
+                <div class="puntuacion-labels">
+                  <span>No sé</span>
+                  <span>😐</span>
+                  <span>🤩</span>
+                  <span>🔥</span>
+                </div>
+                <small class="form-help">¿Qué nota le pondrías? (0 = sin calificar)</small>
+              </div>
+
+              <!-- Estado de seguimiento -->
+              <div class="form-group">
+                <label for="fav-estado-seguimiento" class="form-label">📌 Estado de seguimiento</label>
+                <select id="fav-estado-seguimiento" name="estado-seguimiento" class="form-control">
+                  <option value="">Seleccioná una opción</option>
+                  <option value="Para ver">📋 Para ver</option>
+                  <option value="Viendo">▶️ Viendo ahora</option>
+                  <option value="Completado">✅ Ya lo vi</option>
+                  <option value="Abandonado">⏸️ Lo dejé</option>
+                  <option value="Esperando">⏳ Esperando nueva temporada</option>
+                </select>
+              </div>
+
+              <!-- Nota personal -->
+              <div class="form-group form-group-last">
+                <label for="fav-nota" class="form-label">✍️ Nota personal</label>
+                <textarea id="fav-nota" name="nota" maxlength="300" rows="3" 
+                          placeholder="¿Qué te pareció? ¿Qué destacarías?" 
+                          class="form-control form-textarea"></textarea>
+                <small class="form-help"><span id="contador-nota">0</span>/300 caracteres</small>
+              </div>
+
+              <!-- Acciones -->
+              <div class="form-actions">
+                <button type="button" id="btn-cerrar-panel-2" class="btn btn-outline">Cancelar</button>
+                <button type="submit" class="btn btn-primary">💾 Guardar</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
 
+      <!-- POSTER (FIJO) -->
       <div class="detalle-poster-col">
         <div class="poster">
           ${imagenHTML}
@@ -245,6 +307,7 @@ function renderDetalle(container, anime) {
       </div>
     </div>
 
+    <!-- 4 BLOQUES DE INFORMACIÓN -->
     <div class="detalle-stats-grid">
       <div class="stat-card">
         <span class="stat-label">Fecha de estreno</span>
@@ -270,8 +333,6 @@ function renderDetalle(container, anime) {
     </div>
   `;
 }
-
-
 
 function initFavoritos() {
   const container = document.getElementById("grid-favoritos");
@@ -326,7 +387,6 @@ function renderCards(container, list, esVistaFavoritos = false) {
     const card = document.createElement("article");
     card.classList.add("anime-card");
 
-    // Agregamos la validación para contemplar los 3 estados de forma limpia
     let claseEstado = "finalizada";
     if (anime.estado === "En emisión") {
       claseEstado = "emision";
@@ -381,69 +441,216 @@ function renderCards(container, list, esVistaFavoritos = false) {
   }
 }
 
+// ============================================================
+// PANEL DESPLEGABLE DE FAVORITOS
+// ============================================================
 
-function setupModalFavoritos(anime) {
-  const btnFav = document.getElementById("btn-fav");
-  const modal = document.getElementById("modal-favoritos");
-  const btnCerrar = document.getElementById("btn-cerrar-modal");
-  const formFav = document.getElementById("form-favorito");
+let animeActual = null;
+let feedbackTimeout = null;
 
-  if (!btnFav) {
-    console.error("No se encontró el botón #btn-fav en el DOM.");
+function setupFavoritoPanel(anime) {
+  animeActual = anime;
+  
+  const panel = document.getElementById('panel-favorito');
+  const btnToggle = document.getElementById('btn-toggle-panel');
+  const btnFav = document.getElementById('btn-fav');
+  const btnCerrar1 = document.getElementById('btn-cerrar-panel');
+  const btnCerrar2 = document.getElementById('btn-cerrar-panel-2');
+  const form = document.getElementById('form-favorito');
+  
+  if (!panel || !btnFav) {
+    console.warn('Panel o botón no encontrado');
     return;
   }
-
-  btnFav.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    const yaEsFav = esFavorito(String(anime.id));
-
-    if (yaEsFav) {
-      eliminarDeFavoritos(String(anime.id));
-      btnFav.textContent = "♡ Agregar a Favoritos";
-      btnFav.classList.remove("is-favorito");
-      alert("Anime quitado de tus favoritos.");
-    } else {
-      if (modal) {
-        modal.classList.add("is-open");
-      } else {
-        console.error("No se encontró el elemento #modal-favoritos en el HTML.");
-      }
-    }
-  });
-
-  if (btnCerrar && modal) {
-    btnCerrar.addEventListener("click", () => {
-      modal.classList.remove("is-open");
+  
+  configurarBotonFavorito(anime, panel);
+  
+  if (btnToggle) {
+    btnToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePanel(panel, btnToggle);
     });
   }
-
-  if (formFav) {
-    formFav.addEventListener("submit", (e) => {
+  
+  if (btnCerrar1) btnCerrar1.addEventListener('click', () => cerrarPanel(panel, btnToggle));
+  if (btnCerrar2) btnCerrar2.addEventListener('click', () => cerrarPanel(panel, btnToggle));
+  
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    const isPanel = target.closest('#panel-favorito');
+    const isButton = target.closest('#btn-fav');
+    const isToggle = target.closest('#btn-toggle-panel');
+    if (!isPanel && !isButton && !isToggle && panel && panel.style.display === 'block') {
+      cerrarPanel(panel, btnToggle);
+    }
+  });
+  
+  configurarInteraccionesFormulario();
+  
+  if (form) {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
+      guardarFavoritoDesdePanel(anime, panel, btnToggle);
+    });
+  }
+}
 
-      const favoritoData = {
+function togglePanel(panel, btnToggle) {
+  const isOpen = panel.style.display === 'block';
+  if (isOpen) {
+    cerrarPanel(panel, btnToggle);
+  } else {
+    cargarDatosExistentes(animeActual);
+    abrirPanel(panel, btnToggle);
+  }
+}
+
+function abrirPanel(panel, btnToggle) {
+  if (!panel) return;
+  panel.style.display = 'block';
+  panel.classList.add('open');
+  if (btnToggle) btnToggle.classList.add('open');
+}
+
+function cerrarPanel(panel, btnToggle) {
+  if (!panel) return;
+  panel.style.display = 'none';
+  panel.classList.remove('open');
+  if (btnToggle) btnToggle.classList.remove('open');
+}
+
+function mostrarFeedback(btn, mensaje, clase) {
+  if (feedbackTimeout) {
+    clearTimeout(feedbackTimeout);
+    feedbackTimeout = null;
+  }
+  
+  const textoOriginal = btn.textContent;
+  
+  btn.textContent = mensaje;
+  btn.classList.remove('feedback-success', 'feedback-error', 'feedback');
+  btn.classList.add('feedback', clase);
+  
+  feedbackTimeout = setTimeout(() => {
+    btn.textContent = textoOriginal;
+    btn.classList.remove('feedback', 'feedback-success', 'feedback-error');
+    feedbackTimeout = null;
+  }, 2000);
+}
+
+function configurarBotonFavorito(anime, panel) {
+  const btnFav = document.getElementById('btn-fav');
+  const btnToggle = document.getElementById('btn-toggle-panel');
+  if (!btnFav) return;
+  
+  btnFav.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const yaEsFav = esFavorito(String(anime.id));
+    
+    if (yaEsFav) {
+      eliminarDeFavoritos(String(anime.id));
+      btnFav.textContent = '♡ Agregar a Favoritos';
+      btnFav.classList.remove('is-favorito');
+      mostrarFeedback(btnFav, '🗑️ Eliminado', 'feedback-error');
+    } else {
+      const data = {
         id: String(anime.id),
         titulo: anime.titulo,
         poster: anime.poster,
         rating: anime.rating,
         duracionMin: anime.duracionMin,
         estado: anime.estado,
-        estadoSeguimiento: document.getElementById("fav-estado-seguimiento").value,
-        prioridad: parseInt(document.getElementById("fav-prioridad").value, 10),
-        etiqueta: document.getElementById("fav-etiqueta").value.trim(),
-        nota: document.getElementById("fav-nota").value.trim()
+        puntuacion: '0',
+        estadoSeguimiento: '',
+        nota: '',
+        prioridad: 1,
+        fecha: new Date().toISOString()
       };
+      guardarEnFavoritos(data);
+      
+      btnFav.textContent = '♥ Quitar de Favoritos';
+      btnFav.classList.add('is-favorito');
+      mostrarFeedback(btnFav, '✅ Agregado', 'feedback-success');
+      
+      cargarDatosExistentes(anime);
+      abrirPanel(panel, btnToggle);
+    }
+  });
+}
 
-      guardarEnFavoritos(favoritoData);
-
-      modal.classList.remove("is-open");
-      btnFav.textContent = "♥ Quitar de Favoritos";
-      btnFav.classList.add("is-favorito");
-
-      alert("¡Anime agregado a favoritos!");
+function configurarInteraccionesFormulario() {
+  const slider = document.getElementById('fav-puntuacion');
+  const valor = document.getElementById('puntuacion-valor');
+  if (slider && valor) {
+    slider.addEventListener('input', () => {
+      valor.textContent = slider.value === '0' ? '—' : slider.value;
     });
   }
+  
+  const textarea = document.getElementById('fav-nota');
+  const contador = document.getElementById('contador-nota');
+  if (textarea && contador) {
+    textarea.addEventListener('input', () => {
+      contador.textContent = textarea.value.length;
+    });
+  }
+}
+
+function cargarDatosExistentes(anime) {
+  const favoritos = obtenerFavoritos();
+  const data = favoritos.find(f => String(f.id) === String(anime.id));
+  if (!data) return;
+  
+  const slider = document.getElementById('fav-puntuacion');
+  const valor = document.getElementById('puntuacion-valor');
+  if (slider && data.puntuacion) {
+    slider.value = data.puntuacion;
+    valor.textContent = data.puntuacion === '0' ? '—' : data.puntuacion;
+  }
+  
+  const select = document.getElementById('fav-estado-seguimiento');
+  if (select && data.estadoSeguimiento) {
+    select.value = data.estadoSeguimiento;
+  }
+  
+  const textarea = document.getElementById('fav-nota');
+  const contador = document.getElementById('contador-nota');
+  if (textarea && data.nota) {
+    textarea.value = data.nota;
+    contador.textContent = data.nota.length;
+  }
+}
+
+function guardarFavoritoDesdePanel(anime, panel, btnToggle) {
+  const favoritos = obtenerFavoritos();
+  const existente = favoritos.find(f => String(f.id) === String(anime.id)) || {};
+  
+  const data = {
+    id: String(anime.id),
+    titulo: anime.titulo,
+    poster: anime.poster,
+    rating: anime.rating,
+    duracionMin: anime.duracionMin,
+    estado: anime.estado,
+    puntuacion: document.getElementById('fav-puntuacion').value || '0',
+    estadoSeguimiento: document.getElementById('fav-estado-seguimiento').value || '',
+    nota: document.getElementById('fav-nota').value.trim() || '',
+    prioridad: existente.prioridad || 1,
+    fecha: new Date().toISOString()
+  };
+  
+  guardarEnFavoritos(data);
+  
+  const btnFav = document.getElementById('btn-fav');
+  if (btnFav) {
+    btnFav.textContent = '♥ Quitar de Favoritos';
+    btnFav.classList.add('is-favorito');
+    mostrarFeedback(btnFav, '✅ Guardado', 'feedback-success');
+  }
+  
+  cerrarPanel(panel, btnToggle);
 }
 
 function poblarFiltrosEstaticos() {
@@ -548,7 +755,6 @@ function construirUrlConPagina(pagina) {
 }
 
 function renderPaginacion(paginaActual, totalPaginas) {
-  
   const contenedor = document.getElementById("paginacion-catalogo");
   if (!contenedor) return;
 
@@ -583,4 +789,3 @@ function renderPaginacion(paginaActual, totalPaginas) {
 
   contenedor.innerHTML = `${botonAnterior}${numeros}${botonSiguiente}`;
 }
-

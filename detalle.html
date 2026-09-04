@@ -37,7 +37,7 @@
         <a href="index.html">Inicio</a>
         <a href="catalogo.html">Catálogo</a>
         <a href="favoritos.html">Mis Favoritos</a>
-        <a href= "contacto.html">Contacto</a>
+        <a href="contacto.html">Contacto</a>
       </nav>
     </div>
   </header>
@@ -47,47 +47,6 @@
       <div class="loading" role="status">Consultando el anime…</div>
     </div>
   </main>
-
-  <!-- Modal -->
-  <div id="modal-favoritos" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-favoritos-titulo">
-    <div class="modal-box">
-      <h2 id="modal-favoritos-titulo" class="modal-title">Personalizar Favorito</h2>
-      <form id="form-favorito">
-
-        <div class="form-group">
-          <label for="fav-estado-seguimiento" class="form-label">Estado de seguimiento *</label>
-          <select id="fav-estado-seguimiento" name="estado-seguimiento" required class="form-control">
-            <option value="Para ver">Para ver</option>
-            <option value="Viendo">Viendo</option>
-            <option value="Completado">Completado</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="fav-prioridad" class="form-label">Prioridad (1 o mayor) *</label>
-          <input type="number" id="fav-prioridad" name="prioridad" min="1" value="1" required class="form-control">
-        </div>
-
-        <div class="form-group">
-          <label for="fav-etiqueta" class="form-label">Etiqueta personalizada *</label>
-          <input type="text" id="fav-etiqueta" name="etiqueta" placeholder="Ej: Recomendado, Shonen top..." required
-            class="form-control">
-        </div>
-
-        <div class="form-group form-group-last">
-          <label for="fav-nota" class="form-label">Nota personal (máx. 200 caract.)</label>
-          <textarea id="fav-nota" name="nota" maxlength="200" rows="3" placeholder="Escribí una nota opcional..."
-            class="form-control form-textarea"></textarea>
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" id="btn-cerrar-modal" class="modal-btn-cancel">Cancelar</button>
-          <button type="submit" class="modal-btn-save">Guardar</button>
-        </div>
-
-      </form>
-    </div>
-  </div>
 
   <footer class="site-footer">
     <div class="container footer-row">
