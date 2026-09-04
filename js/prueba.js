@@ -97,24 +97,47 @@ async function initCatalogo() {
   if (inputSearch && filtros.busqueda) inputSearch.value = filtros.busqueda;
 
   container.innerHTML = "<div class='loading'>Buscando el anime…</div>";
-  const { animes, total } = await getCatalogoData(filtros);
-  renderCards(container, animes);
 
-  const selectGenero = document.querySelector(".select-genero");
-  const selectTemporada = document.querySelector(".select-temporada");
-  const selectAnio = document.querySelector(".select-anio");
-  const selectEstado = document.querySelector(".select-estado");
-  const selectOrden = document.querySelector(".select-orden");
+  try {
+      const { animes, total } = await getCatalogoData(filtros);
 
-  if (selectAnio) selectAnio.value = filtros.anio;
-  if (selectGenero) selectGenero.value = filtros.genero;
-  if (selectTemporada) selectTemporada.value = filtros.temporada;
-  if (selectEstado) selectEstado.value = filtros.estado;
-  if (selectOrden) {
-    selectOrden.value = filtros.orden || "-userCount";
+if (!animes || animes.length === 0) {
+        throw new Error("No hay datos disponibles sin conexión");
+      }
+
+      renderCards(container, animes);
+
+      const selectGenero = document.querySelector(".select-genero");
+      const selectTemporada = document.querySelector(".select-temporada");
+      const selectAnio = document.querySelector(".select-anio");
+      const selectEstado = document.querySelector(".select-estado");
+      const selectOrden = document.querySelector(".select-orden");
+
+      if (selectAnio) selectAnio.value = filtros.anio;
+      if (selectGenero) selectGenero.value = filtros.genero;
+      if (selectTemporada) selectTemporada.value = filtros.temporada;
+      if (selectEstado) selectEstado.value = filtros.estado;
+      if (selectOrden) {
+        selectOrden.value = filtros.orden || "-userCount";
+      }
+      const totalPaginas = Math.max(1, Math.ceil(total / 10));
+      renderPaginacion(filtros.pagina, totalPaginas);
+    
+  } catch (error) {
+        console.warn("Modo offline detectado:", error);
+
+    const contenidoOffline = `
+      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
+        <div>
+          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
+          <p style="margin: 0; color: #aaa;">Ups, acá trabajamos con conexión.</p>
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = contenidoOffline;   
   }
-  const totalPaginas = Math.max(1, Math.ceil(total / 10));
-  renderPaginacion(filtros.pagina, totalPaginas);
 }
 
 function setupFiltrosForm() {
