@@ -55,14 +55,27 @@ async function initHome() {
     if (gridEmision) renderCards(gridEmision, emisionMapeada);
     if (gridDestacados) renderCards(gridDestacados, destacadosMapeados);
     if (gridProximos) renderCards(gridProximos, proximosMapeados);
-  } catch (error) {
-    console.error("Error cargando el home:", error);
-    const mensaje = `<div class='error'>Error al cargar: ${error.message}</div>`;
-    if (gridEmision) gridEmision.innerHTML = mensaje;
-    if (gridDestacados) gridDestacados.innerHTML = mensaje;
-    if (gridProximos) gridProximos.innerHTML = mensaje;
+} catch (error) {
+    console.warn("Modo offline detectado:", error);
+
+    const contenidoOffline = `
+      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
+        <div>
+          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
+          <p style="margin: 0; color: #aaa;">Ups, acá trabajamos con conexión.</p>
+        </div>
+      </div>
+    `;
+
+    if (gridEmision) gridEmision.innerHTML = contenidoOffline;
+    if (gridDestacados) gridDestacados.innerHTML = contenidoOffline;
+    if (gridProximos) gridProximos.innerHTML = contenidoOffline;
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  initHome();
+});
 
 async function initCatalogo() {
   const container = document.getElementById("grid-catalogo");
@@ -167,15 +180,14 @@ async function initDetalle() {
   container.innerHTML = "<div class='loading'>Consultando…</div>";
 
   try {
-
-    const sinopsisGuardada = obtenerSinopsisGuardada(animeId);
+    // Intenta buscar el anime online mediante el service / API
     const anime = await getAnimeDetalle(animeId);
 
     if (!anime) {
-      container.innerHTML = "<p class='empty-history'>No se encontró la información de este anime.</p>";
-      return;
+      throw new Error("No se encontró en la API");
     }
 
+    const sinopsisGuardada = obtenerSinopsisGuardada(animeId);
     if (sinopsisGuardada && !anime.sinopsis) {
       anime.sinopsis = sinopsisGuardada;
     }
@@ -188,8 +200,24 @@ async function initDetalle() {
     });
 
   } catch (error) {
-    console.error("Error al inicializar el detalle:", error);
-    container.innerHTML = "<p class='empty-history'>Ocurrió un error al cargar los datos del anime.</p>";
+    console.warn("Modo offline detectado o error de red. Buscando en almacenamiento local...", error);
+
+    const favoritos = obtenerFavoritos();
+    let animeLocal = favoritos.find(f => String(f.id) === String(animeId));
+
+    if (!animeLocal) {
+      const historial = obtenerHistorial();
+      animeLocal = historial.find(h => String(h.id) === String(animeId));
+    }
+
+    if (animeLocal) {
+      renderDetalle(container, animeLocal);
+      requestAnimationFrame(() => {
+        setupFavoritoPanel(animeLocal);
+      });
+    } else {
+      container.innerHTML = "<p class='empty-history'>Estás sin conexión y este anime no está guardado en tus favoritos o historial previo.</p>";
+    }
   }
 }
 

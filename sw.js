@@ -1,12 +1,19 @@
 const CACHE_NAME = "anijaz-cache-v1";
 const ASSETS_TO_CACHE = [
-  "/index.html",
-  "/catalogo.html",
-  "/detalle.html",
-  "/favoritos.html",
-  "/contacto.html",
-  "/CSS/styles.css",
-  "/js/metodos/animestorage.js",
+  "index.html",
+  "catalogo.html",
+  "detalle.html",
+  "favoritos.html",
+  "contacto.html",
+  "css/styles.css",
+  "img/offline.png",
+  "js/fetchs/animeFetch.js",
+  "js/mapeos/animeMapper.js",
+  "js/metodos/animeFilter.js",
+  "js/metodos/animeStorage.js",
+  "js/metodos/animeText.js",
+  "js/services/animeService.js",
+  "/js/prueba.js",
 ];
 
 self.addEventListener("install", (event) => {
@@ -40,7 +47,24 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request)
+        .then((networkResponse) => {
+          return networkResponse;
+        })
+        .catch(() => {
+
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+          return new Response("Recurso no disponible offline", {
+            status: 503,
+            statusText: "Service Unavailable"
+          });
+        });
     })
   );
 });
