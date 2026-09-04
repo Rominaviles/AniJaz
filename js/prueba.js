@@ -231,7 +231,6 @@ function renderDetalle(container, anime) {
 
         ${tagsGeneroHTML ? `<div class="detalle-tags">${tagsGeneroHTML}</div>` : ""}
 
-        <!-- BOTÓN CON FLECHA -->
         <div class="favorito-actions-wrapper">
           <button id="btn-fav" class="${claseBtnFav}">${textoBtnFav}</button>
           <button id="btn-toggle-panel" class="btn-toggle-panel" aria-label="Abrir detalles" title="Detalles del favorito">
@@ -287,7 +286,6 @@ function renderDetalle(container, anime) {
                 <small class="form-help"><span id="contador-nota">0</span>/300 caracteres</small>
               </div>
 
-              <!-- Acciones -->
               <div class="form-actions">
                 <button type="button" id="btn-cerrar-panel-2" class="btn btn-outline">Cancelar</button>
                 <button type="submit" class="btn btn-primary"> Guardar</button>
@@ -297,7 +295,6 @@ function renderDetalle(container, anime) {
         </div>
       </div>
 
-      <!-- POSTER (FIJO) -->
       <div class="detalle-poster-col">
         <div class="poster">
           ${imagenHTML}
@@ -306,7 +303,7 @@ function renderDetalle(container, anime) {
       </div>
     </div>
 
-    <!-- 4 BLOQUES DE INFORMACIÓN -->
+    <!-- BLOQUES DE INFORMACIÓN -->
     <div class="detalle-stats-grid">
       <div class="stat-card">
         <span class="stat-label">Fecha de estreno</span>
@@ -441,7 +438,7 @@ function renderCards(container, list, esVistaFavoritos = false) {
 }
 
 // ============================================================
-// PANEL DESPLEGABLE DE FAVORITOS
+// PANEL DESPLEGABLE 
 // ============================================================
 
 let animeActual = null;
@@ -534,7 +531,7 @@ function mostrarFeedback(btn, mensaje, clase) {
     btn.textContent = textoOriginal;
     btn.classList.remove('feedback', 'feedback-success', 'feedback-error');
     feedbackTimeout = null;
-  }, 2000);
+  }, 700);
 }
 
 function configurarBotonFavorito(anime, panel) {
@@ -552,7 +549,7 @@ function configurarBotonFavorito(anime, panel) {
       eliminarDeFavoritos(String(anime.id));
       btnFav.textContent = '♡ Agregar a Favoritos';
       btnFav.classList.remove('is-favorito');
-      mostrarFeedback(btnFav, '🗑️ Eliminado', 'feedback-error');
+      mostrarFeedback(btnFav, 'ELIMINADO', 'feedback-error');
     } else {
       const data = {
         id: String(anime.id),
@@ -571,7 +568,7 @@ function configurarBotonFavorito(anime, panel) {
       
       btnFav.textContent = '♥ Quitar de Favoritos';
       btnFav.classList.add('is-favorito');
-      mostrarFeedback(btnFav, '✅ Agregado', 'feedback-success');
+      mostrarFeedback(btnFav, 'AGREGADO', 'feedback-success');
       
       cargarDatosExistentes(anime);
       abrirPanel(panel, btnToggle);
