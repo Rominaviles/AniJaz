@@ -56,10 +56,17 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch(() => {
-
           if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
+
+            const url = new URL(event.request.url);
+            const pathSinQuery = url.pathname.replace(/^\//, ''); 
+
+            return caches.match(pathSinQuery || 'index.html')
+              .then((pageResponse) => {
+                return pageResponse || caches.match('./index.html');
+              });
           }
+
           return new Response("Recurso no disponible offline", {
             status: 503,
             statusText: "Service Unavailable"
