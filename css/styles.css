@@ -49,7 +49,7 @@
 }
 
 /* ============================================================
-   RESET / BASE
+    BASE
    ============================================================ */
 *,*::before,*::after{ box-sizing:border-box; }
 
@@ -113,10 +113,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   outline:0.25rem solid var(--cyan);
   outline-offset:0.3rem;
   border-radius:0.2rem;
-}
-
-@media (prefers-reduced-motion: reduce){
-  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
 }
 
 /* ============================================================
@@ -492,20 +488,6 @@ section{ padding-block:5.12rem; position:relative; }
   margin-block: 2rem 4rem;
 }
 
-/* Tablet (48rem - 63.9375rem): 2 o 3 resultados por fila */
-@media (min-width: 48rem) and (max-width: 63.9375rem) {
-  .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  }
-}
-
-/* Móvil (hasta 30rem): 1 o 2 resultados por fila */
-@media (max-width: 30rem) {
-  .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  }
-}
-
 .anime-card{
   position: relative;
   background: var(--night-900);
@@ -530,6 +512,9 @@ section{ padding-block:5.12rem; position:relative; }
 
 .poster img{
   transition: transform 0.4s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .anime-card:hover .poster img {
@@ -648,32 +633,18 @@ section{ padding-block:5.12rem; position:relative; }
 }
 
 /* ============================================================
-   AJUSTES GENERALES DE RESPONSIVE
-   ============================================================ */
-@media (max-width: 63.9375rem) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 47.9375rem) {
-  .nav-bar{ flex-wrap:wrap; }
-  .nav-search{ order:3; max-width:none; width:100%; margin:0; }
-  .nav-toggle{ display:inline-block; margin-left:auto; }
-  .nav{
-    order:4; width:100%;
-    display:none;
-    flex-direction:column; gap:0;
-    border-top:var(--border-w) solid var(--line);
-    margin-top:1.12rem; padding-top:.96rem;
-  }
-  .nav.open{ display:flex; }
-  .nav a{ padding-block:1.04rem; border-bottom:var(--border-w) solid var(--line); }
-}
-
-/* ============================================================
    PÁGINA CATÁLOGO
    ============================================================ */
+.catalog-hero{
+  padding-block: 3.2rem 0;
+}
+.catalog-title{
+  font-size: clamp(3.2rem, 5vw, 4.8rem);
+}
+.lead-narrow{
+  max-width: 60ch;
+}
+
 .filters{
   display:flex; gap:1.6rem; flex-wrap:wrap; align-items:flex-end; 
   background:var(--night-900); border:var(--border-w) solid var(--line); border-radius:var(--radius-lg);
@@ -726,6 +697,13 @@ section{ padding-block:5.12rem; position:relative; }
   text-align:center; padding:5.6rem 1.6rem; border:var(--border-w) dashed var(--line); border-radius:var(--radius-lg);
 }
 .empty-state h3{ font-family:var(--font-body); text-transform:none; font-size:1.84rem; color:var(--paper); }
+
+/* ============================================================
+   PÁGINA FAVORITOS
+   ============================================================ */
+.favoritos-section{
+  padding-block: 2rem 4rem;
+}
 
 /* ============================================================
    PAGINACIÓN
@@ -1014,7 +992,6 @@ section{ padding-block:5.12rem; position:relative; }
   border-color:var(--accent-red);
 }
 
-/* Grilla de estadísticas */
 .detalle-stats-grid{
   display:grid;
   grid-template-columns:repeat(4, 1fr);
@@ -1042,7 +1019,6 @@ section{ padding-block:5.12rem; position:relative; }
   color:var(--paper);
 }
 
-/* Sinopsis */
 .detalle-sinopsis-box{ margin-top:3.2rem; width:100%; }
 .detalle-sinopsis{
   line-height:1.7;
@@ -1050,53 +1026,11 @@ section{ padding-block:5.12rem; position:relative; }
   opacity:.95;
 }
 
-/* Responsive de la página de detalle */
-@media (max-width:63.9375rem){
-  .detalle-backdrop{ height:36rem; }
-
-  .detalle-hero{
-    flex-direction:column-reverse;
-    align-items:center;
-    text-align:center;
-    min-height:auto;
-    padding-top:4rem;
-    gap:2.4rem;
-  }
-
-  .detalle-hero-info{ min-width:0; width:100%; }
-
-  .detalle-badges,
-  .detalle-meta-row,
-  .detalle-tags{
-    justify-content:center;
-  }
-
-  .detalle-poster-col{ flex:0 0 auto; width:20rem; }
-
-  .btn-fav-detalle{ margin-inline:auto; }
-}
-
-@media (max-width:47.9375rem){
-  .detalle-backdrop{ height:28rem; }
-
-  .detalle-poster-col{ width:16rem; }
-
-  .detalle-stats-grid{ grid-template-columns:repeat(2, 1fr); }
-
-  .btn-fav-detalle{ width:100%; }
-}
-
-@media (max-width:30rem){
-  .detalle-stats-grid{ grid-template-columns:1fr; }
-
-  .detalle-hero-info h1{ font-size:2.4rem; }
-}
-
 /* ============================================================
    SECCIÓN DE CONTACTO
    ============================================================ */
 .contacto-section {
-  padding-block: 4rem; 
+  padding-block: 3.2rem;
   width: 100%;
 }
 
@@ -1182,8 +1116,57 @@ section{ padding-block:5.12rem; position:relative; }
   filter: none; 
 }
 
-/* Responsive */
-@media (max-width: 76.8rem) {
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{ border-top:var(--border-w) solid var(--line); padding-block:4.16rem; margin-top:3.2rem; }
+.footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.6rem; align-items:center; }
+.footer-row p{ margin:0; font-family:var(--font-mono); font-size:1.152rem; color:var(--fog-dim); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* ---------- ≤1023px ---------- */
+@media (max-width: 63.9375rem) {
+  /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Historial:  */
+  .history-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  /* Detalle */
+  .detalle-backdrop{ height:36rem; }
+
+  .detalle-hero{
+    flex-direction:column-reverse;
+    align-items:center;
+    text-align:center;
+    min-height:auto;
+    padding-top:4rem;
+    gap:2.4rem;
+  }
+
+  .detalle-hero-info{ min-width:0; width:100%; }
+
+  .detalle-badges,
+  .detalle-meta-row,
+  .detalle-tags{
+    justify-content:center;
+  }
+
+  .detalle-poster-col{ flex:0 0 auto; width:20rem; }
+
+  .btn-fav-detalle{ margin-inline:auto; }
+
+  /* Contacto */
   .contacto-section {
     padding-block: 2.4rem;
   }
@@ -1199,9 +1182,47 @@ section{ padding-block:5.12rem; position:relative; }
   }
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.site-footer{ border-top:var(--border-w) solid var(--line); padding-block:4.16rem; margin-top:3.2rem; }
-.footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.6rem; align-items:center; }
-.footer-row p{ margin:0; font-family:var(--font-mono); font-size:1.152rem; color:var(--fog-dim); }
+/* ---------- Tablet: 768px – 1023px ---------- */
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+}
+
+/* ---------- ≤ 767px ---------- */
+@media (max-width: 47.9375rem) {
+  /* Navegación */
+  .nav-bar{ flex-wrap:wrap; }
+  .nav-search{ order:3; max-width:none; width:100%; margin:0; }
+  .nav-toggle{ display:inline-block; margin-left:auto; }
+  .nav{
+    order:4; width:100%;
+    display:none;
+    flex-direction:column; gap:0;
+    border-top:var(--border-w) solid var(--line);
+    margin-top:1.12rem; padding-top:.96rem;
+  }
+  .nav.open{ display:flex; }
+  .nav a{ padding-block:1.04rem; border-bottom:var(--border-w) solid var(--line); }
+
+  /* Detalle */
+  .detalle-backdrop{ height:28rem; }
+  .detalle-poster-col{ width:16rem; }
+  .detalle-stats-grid{ grid-template-columns:repeat(2, 1fr); }
+  .btn-fav-detalle{ width:100%; }
+}
+
+/* ---------- ≤ 480px ---------- */
+@media (max-width: 30rem) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  }
+
+  .detalle-stats-grid{ grid-template-columns:1fr; }
+  .detalle-hero-info h1{ font-size:2.4rem; }
+}
+
+/* ---------- Preferencia de accesibilidad---------- */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}

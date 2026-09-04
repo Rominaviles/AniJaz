@@ -64,9 +64,9 @@ function fetchAnimeCatalogo({ busqueda = "", genero = "", estado = "", temporada
 // Mymemory
 const _cacheTraducciones = new Map();
 
-async function traducirChunk(chunk) {
+async function traducirAnime(ani) {
   const res = await fetch(
-    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|es`
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(ani)}&langpair=en|es`
   );
   if (!res.ok) throw new Error(`Traducción falló: ${res.status}`);
   const data = await res.json();
@@ -78,10 +78,10 @@ async function traducirTexto(texto) {
   if (_cacheTraducciones.has(texto)) return _cacheTraducciones.get(texto);
 
   try {
-    const chunks = splitTextForTranslation(texto); 
+    const anis = splitTextForTranslation(texto); 
     const traducidos = [];
-    for (const chunk of chunks) {
-      traducidos.push(await traducirChunk(chunk));
+    for (const ani of anis) {
+      traducidos.push(await traducirAnime(ani));
     }
     const traducido = traducidos.join(" ");
     _cacheTraducciones.set(texto, traducido);
