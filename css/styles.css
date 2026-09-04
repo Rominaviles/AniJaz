@@ -1312,8 +1312,8 @@ section{ padding-block:5.12rem; position:relative; }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-
 @media (max-width: 63.9375rem) {
+  
   .hero-grid {
     grid-template-columns: 1fr;
   }
@@ -1325,7 +1325,42 @@ section{ padding-block:5.12rem; position:relative; }
     overflow-y: visible;
   }
 
-  .detalle-backdrop{ height:36rem; }
+  .contacto-section {
+    padding-block: 2.4rem;
+  }
+  .contacto-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .contacto-info-box {
+    padding: 2rem;
+  }
+  .contacto-map-box {
+    min-height: 30rem; 
+  }
+}
+
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  .nav-bar{ flex-wrap:wrap; }
+  .nav-search{ order:3; max-width:none; width:100%; margin:0; }
+  .nav-toggle{ display:inline-block; margin-left:auto; }
+  .nav{
+    order:4; width:100%;
+    display:none;
+    flex-direction:column; gap:0;
+    border-top:var(--border-w) solid var(--line);
+    margin-top:1.12rem; padding-top:.96rem;
+  }
+  .nav.open{ display:flex; }
+  .nav a{ padding-block:1.04rem; border-bottom:var(--border-w) solid var(--line); }
+
+  .detalle-backdrop{ height:28rem; }
 
   .detalle-hero{
     display:flex;
@@ -1365,52 +1400,13 @@ section{ padding-block:5.12rem; position:relative; }
   }
 
   .detalle-poster-col .poster{
-    width:18rem;
+    width:16rem;
     max-width:100%;
   }
 
-  .btn-fav-detalle{ margin-inline:auto; }
+  .btn-fav-detalle{ margin-inline:auto; width:100%; min-width:unset; }
 
-  .contacto-section {
-    padding-block: 2.4rem;
-  }
-  .contacto-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .contacto-info-box {
-    padding: 2rem;
-  }
-  .contacto-map-box {
-    min-height: 30rem; 
-  }
-}
-
-@media (min-width: 48rem) and (max-width: 63.9375rem) {
-  .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  }
-}
-
-@media (max-width: 47.9375rem) {
-  .nav-bar{ flex-wrap:wrap; }
-  .nav-search{ order:3; max-width:none; width:100%; margin:0; }
-  .nav-toggle{ display:inline-block; margin-left:auto; }
-  .nav{
-    order:4; width:100%;
-    display:none;
-    flex-direction:column; gap:0;
-    border-top:var(--border-w) solid var(--line);
-    margin-top:1.12rem; padding-top:.96rem;
-  }
-  .nav.open{ display:flex; }
-  .nav a{ padding-block:1.04rem; border-bottom:var(--border-w) solid var(--line); }
-
-  .detalle-backdrop{ height:28rem; }
-  .detalle-poster-col{ width:16rem; }
   .detalle-stats-grid{ grid-template-columns:repeat(2, 1fr); }
-
-  .btn-fav-detalle{ width:100%; min-width:unset; }
 
   .favorito-panel-content {
     padding: 1.6rem;
