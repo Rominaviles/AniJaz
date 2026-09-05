@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js")
+        .then((reg) => console.log("SW registrado:", reg.scope))
+        .catch((err) => console.error("Error al registrar SW:", err));
+    });
+  }
+
   setupSearchForms();
 
   const gridHome = document.getElementById("grid-emision") || document.getElementById("grid-destacados") || document.getElementById("grid-proximos");
@@ -47,12 +56,22 @@ async function initHome() {
     if (gridEmision) renderCards(gridEmision, emisionMapeada);
     if (gridDestacados) renderCards(gridDestacados, destacadosMapeados);
     if (gridProximos) renderCards(gridProximos, proximosMapeados);
-  } catch (error) {
-    console.error("Error cargando el home:", error);
-    const mensaje = `<div class='error'>Error al cargar: ${error.message}</div>`;
-    if (gridEmision) gridEmision.innerHTML = mensaje;
-    if (gridDestacados) gridDestacados.innerHTML = mensaje;
-    if (gridProximos) gridProximos.innerHTML = mensaje;
+} catch (error) {
+    console.warn("Modo offline detectado:", error);
+
+    const contenidoOffline = `
+      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
+        <div>
+          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
+          <p style="margin: 0; color: #aaa;">Ups, acá trabajamos con conexión.</p>
+        </div>
+      </div>
+    `;
+
+    if (gridEmision) gridEmision.innerHTML = contenidoOffline;
+    if (gridDestacados) gridDestacados.innerHTML = contenidoOffline;
+    if (gridProximos) gridProximos.innerHTML = contenidoOffline;
   }
 }
 
@@ -76,24 +95,47 @@ async function initCatalogo() {
   if (inputSearch && filtros.busqueda) inputSearch.value = filtros.busqueda;
 
   container.innerHTML = "<div class='loading'>Buscando el anime…</div>";
-  const { animes, total } = await getCatalogoData(filtros);
-  renderCards(container, animes);
 
-  const selectGenero = document.querySelector(".select-genero");
-  const selectTemporada = document.querySelector(".select-temporada");
-  const selectAnio = document.querySelector(".select-anio");
-  const selectEstado = document.querySelector(".select-estado");
-  const selectOrden = document.querySelector(".select-orden");
+  try {
+      const { animes, total } = await getCatalogoData(filtros);
 
-  if (selectAnio) selectAnio.value = filtros.anio;
-  if (selectGenero) selectGenero.value = filtros.genero;
-  if (selectTemporada) selectTemporada.value = filtros.temporada;
-  if (selectEstado) selectEstado.value = filtros.estado;
-  if (selectOrden) {
-    selectOrden.value = filtros.orden || "-userCount";
+      if (!animes || animes.length === 0) {
+        throw new Error("No hay datos disponibles sin conexión");
+      }
+      
+      renderCards(container, animes);
+
+      const selectGenero = document.querySelector(".select-genero");
+      const selectTemporada = document.querySelector(".select-temporada");
+      const selectAnio = document.querySelector(".select-anio");
+      const selectEstado = document.querySelector(".select-estado");
+      const selectOrden = document.querySelector(".select-orden");
+
+      if (selectAnio) selectAnio.value = filtros.anio;
+      if (selectGenero) selectGenero.value = filtros.genero;
+      if (selectTemporada) selectTemporada.value = filtros.temporada;
+      if (selectEstado) selectEstado.value = filtros.estado;
+      if (selectOrden) {
+        selectOrden.value = filtros.orden || "-userCount";
+      }
+      const totalPaginas = Math.max(1, Math.ceil(total / 10));
+      renderPaginacion(filtros.pagina, totalPaginas);
+    
+  } catch (error) {
+        console.warn("Modo offline detectado:", error);
+
+    const contenidoOffline = `
+      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
+        <div>
+          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
+          <p style="margin: 0; color: #aaa;">Ups, acá trabajamos con conexión.</p>
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = contenidoOffline;   
   }
-  const totalPaginas = Math.max(1, Math.ceil(total / 10));
-  renderPaginacion(filtros.pagina, totalPaginas);
 }
 
 function setupFiltrosForm() {
@@ -156,32 +198,39 @@ async function initDetalle() {
     return;
   }
 
-  container.innerHTML = "<div class='loading'>Consultando…</div>";
+  let anime = obtenerFavoritos().find(f => String(f.id) === String(animeId)) ||
+              obtenerHistorial().find(h => String(h.id) === String(animeId));
 
-  try {
+  const tieneDatosCompletos = anime && anime.sinopsis && anime.sinopsis !== "Sin sinopsis disponible.";
 
-    const sinopsisGuardada = obtenerSinopsisGuardada(animeId);
-    const anime = await getAnimeDetalle(animeId);
-
-    if (!anime) {
-      container.innerHTML = "<p class='empty-history'>No se encontró la información de este anime.</p>";
-      return;
+  if (!tieneDatosCompletos && navigator.onLine) {
+    try {
+      const animeOnline = await getAnimeDetalle(animeId);
+      if (animeOnline) {
+        anime = animeOnline;
+        guardarEnHistorial(anime);
+      }
+    } catch (error) {
+      console.warn("No se pudo actualizar desde la API, usando datos locales:", error);
     }
+  }
 
-    if (sinopsisGuardada && !anime.sinopsis) {
-      anime.sinopsis = sinopsisGuardada;
-    }
-
-    guardarEnHistorial(anime);
+  if (anime) {
     renderDetalle(container, anime);
     
     requestAnimationFrame(() => {
       setupFavoritoPanel(anime);
     });
-
-  } catch (error) {
-    console.error("Error al inicializar el detalle:", error);
-    container.innerHTML = "<p class='empty-history'>Ocurrió un error al cargar los datos del anime.</p>";
+  } else {
+    container.innerHTML = `
+      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
+        <div>
+          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
+          <p style="margin: 0; color: #aaa;">Este anime no está guardado y no hay conexión para buscarlo.</p>
+        </div>
+      </div>
+    `;
   }
 }
 
@@ -204,9 +253,14 @@ function renderDetalle(container, anime) {
   const textoBtnFav = yaEsFav ? "♥ Quitar de Favoritos" : "♡ Agregar a Favoritos";
 
   const anio = anime.startDate ? anime.startDate.slice(0, 4) : "N/C";
+  
+  // Variables protegidas para evitar errores si faltan datos en localStorage
+  const tipoShowTexto = anime.showType ? anime.showType : "N/C";
+  const tipoShowLower = anime.showType ? anime.showType.toLowerCase() : "n/c";
 
-  const tagsGeneroHTML = anime.generos.length
-    ? anime.generos.map((g) => `<span class="tag">${g}</span>`).join("")
+  const generosArray = Array.isArray(anime.generos) ? anime.generos : [];
+  const tagsGeneroHTML = generosArray.length
+    ? generosArray.map((g) => `<span class="tag">${g}</span>`).join("")
     : "";
 
   container.innerHTML = `
@@ -220,19 +274,19 @@ function renderDetalle(container, anime) {
       <div class="detalle-hero-info">
         <div class="detalle-badges">
           <span class="badge">${anio}</span>
-          <span class="badge">${anime.estado}</span>
-          <span class="badge badge-tipo">${anime.showType.toLowerCase()}</span>
+          <span class="badge">${anime.estado || "N/C"}</span>
+          <span class="badge badge-tipo">${tipoShowLower}</span>
         </div>
 
         <h1>${anime.titulo}</h1>
         ${anime.tituloOriginal ? `<p class="detalle-titulo-original">${anime.tituloOriginal}</p>` : ""}
 
         <div class="detalle-meta-row">
-          <span>${anime.duracionMin} min por ep</span>
+          <span>${anime.duracionMin || "?"} min por ep</span>
           <span class="meta-dot">•</span>
-          <span>${anime.episodios} episodios</span>
+          <span>${anime.episodios || "?"} episodios</span>
           <span class="meta-dot">•</span>
-          <span class="stars">★ ${anime.rating}</span>
+          <span class="stars">★ ${anime.rating || "N/C"}</span>
         </div>
 
         ${tagsGeneroHTML ? `<div class="detalle-tags">${tagsGeneroHTML}</div>` : ""}
@@ -304,7 +358,7 @@ function renderDetalle(container, anime) {
       <div class="detalle-poster-col">
         <div class="poster">
           ${imagenHTML}
-          <span class="estado ${claseEstado}">${anime.estado}</span>
+          <span class="estado ${claseEstado}">${anime.estado || "N/C"}</span>
         </div>
       </div>
     </div>
@@ -313,28 +367,29 @@ function renderDetalle(container, anime) {
     <div class="detalle-stats-grid">
       <div class="stat-card">
         <span class="stat-label">Fecha de estreno</span>
-        <span class="stat-value">${formatearFecha(anime.startDate)}</span>
+        <span class="stat-value">${formatearFecha ? formatearFecha(anime.startDate) : (anime.startDate || "N/C")}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Duración por episodio</span>
-        <span class="stat-value">${anime.duracionMin} min</span>
+        <span class="stat-value">${anime.duracionMin || "?"} min</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Tipo</span>
-        <span class="stat-value">${anime.showType || "N/C"}</span>
+        <span class="stat-value">${tipoShowTexto}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Estado</span>
-        <span class="stat-value">${anime.estado}</span>
+        <span class="stat-value">${anime.estado || "N/C"}</span>
       </div>
     </div>
 
     <div class="detalle-sinopsis-box">
       <h2>Sinopsis</h2>
-      <p class="detalle-sinopsis">${anime.sinopsis}</p>
+      <p class="detalle-sinopsis">${anime.sinopsis || "Sin sinopsis disponible."}</p>
     </div>
   `;
 }
+
 
 function initFavoritos() {
   const container = document.getElementById("grid-favoritos");
