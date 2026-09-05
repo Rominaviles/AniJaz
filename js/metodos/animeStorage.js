@@ -63,3 +63,16 @@ function guardarEnHistorial(anime) {
 function limpiarHistorial() {
   localStorage.removeItem(STORAGE_KEY_HISTORIAL);
 }
+
+// --- Sinopsis ---
+function obtenerSinopsisGuardada(id) {
+  const favs = obtenerFavoritos();
+  const fav = favs.find((item) => String(item.id) === String(id));
+  if (fav && fav.sinopsis) return fav.sinopsis;
+
+  const historial = obtenerHistorial();
+  const hist = historial.find((item) => String(item.id) === String(id));
+  if (hist && hist.sinopsis) return hist.sinopsis;
+
+  return null; 
+}
