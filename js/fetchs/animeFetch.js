@@ -1,4 +1,3 @@
-
 const BASE_URL = "https://kitsu.io/api/edge";
 
 async function fetchFromApi(endpoint) {

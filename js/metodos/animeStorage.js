@@ -1,5 +1,5 @@
-const STORAGE_KEY_FAVORITOS = "anidrex_favoritos";
-const STORAGE_KEY_HISTORIAL = "anidrex_historial";
+const STORAGE_KEY_FAVORITOS = "anijaz_favoritos";
+const STORAGE_KEY_HISTORIAL = "anijaz_historial";
 
 function _leerJSON(key) {
   try {

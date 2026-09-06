@@ -43,9 +43,7 @@
 
 }
 
-/* ============================================================
-   BASE
-   ============================================================ */
+/* BASE */
 *,*::before,*::after{ box-sizing:border-box; }
 
 html{
@@ -116,9 +114,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-radius:0.2rem;
 }
 
-/* ============================================================
-   NAVEGACIÓN
-   ============================================================ */
+/* NAVEGACIÓN */
 .site-header{
   position:sticky; top:0; z-index:80;
   background:rgba(var(--night-950-rgb),.92);
@@ -238,9 +234,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .nav a:hover{ color:var(--paper); }
 .nav a[aria-current="page"]{ color:var(--cyan); border-color:var(--cyan); }
 
-/* ============================================================
-   HERO
-   ============================================================ */
+/* HERO */
 .hero{
   position:relative;
   padding-block:7.2rem 5.6rem;
@@ -324,9 +318,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .hero-tags a:hover{ color:var(--cyan); border-color:var(--cyan); }
 
-/* ============================================================
-   HISTORIAL
-   ============================================================ */
+/* HISTORIAL */
 .history-box {
   background: var(--night-900);
   border: var(--border-w) solid var(--line);
@@ -463,9 +455,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color:var(--fog-dim);
 }
 
-/* ============================================================
-   SECCIONES GENÉRICAS
-   ============================================================ */
+/* SECCIONES GENÉRICAS */
 section{ padding-block:5.12rem; position:relative; }
 .channel-head{
   display:flex; align-items:baseline; gap:1.6rem; margin-bottom:2.88rem;
@@ -474,9 +464,7 @@ section{ padding-block:5.12rem; position:relative; }
 .channel-head h2{ font-size:clamp(2.24rem,3vw,3.2rem); }
 .channel-head .lead{ margin:0 0 0 auto; max-width:36ch; font-size:1.472rem; align-self:center; }
 
-/* ============================================================
-   GRILLA Y TARJETAS DE ANIME
-   ============================================================ */
+/* GRILLA Y TARJETAS DE ANIME */
 .card-grid{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
@@ -622,9 +610,7 @@ section{ padding-block:5.12rem; position:relative; }
   display:block;
 }
 
-/* ============================================================
-   PÁGINA CATÁLOGO
-   ============================================================ */
+/* PÁGINA CATÁLOGO */
 .catalog-hero{
   padding-block: 3.2rem 0;
 }
@@ -678,16 +664,12 @@ section{ padding-block:5.12rem; position:relative; }
   color:var(--cyan);
 }
 
-/* ============================================================
-   PÁGINA FAVORITOS
-   ============================================================ */
+/* PÁGINA FAVORITOS */
 .favoritos-section{
   padding-block: 2rem 4rem;
 }
 
-/* ============================================================
-   PAGINACIÓN
-   ============================================================ */
+/* PAGINACIÓN */
 .paginacion{
   display:flex;
   justify-content:center;
@@ -729,9 +711,7 @@ section{ padding-block:5.12rem; position:relative; }
   padding-inline:.4rem;
 }
 
-/* ============================================================
-   ESTADO DE CARGA
-   ============================================================ */
+/* ESTADO DE CARGA */
 .loading{
   font-family:var(--font-mono); font-size:1.36rem; color:var(--cyan);
   padding:4rem 0; display:flex; align-items:center; gap:1.12rem;
@@ -742,9 +722,7 @@ section{ padding-block:5.12rem; position:relative; }
 }
 @keyframes blink{ 50%{ opacity:.15; } }
 
-/* ============================================================
-   DETALLE DINÁMICO (renderDetalle)
-   ============================================================ */
+/* DETALLE DINÁMICO (renderDetalle) */
 .detail-content{
   position:relative;
   padding-block:4.16rem;
@@ -1206,9 +1184,7 @@ section{ padding-block:5.12rem; position:relative; }
   opacity:.95;
 }
 
-/* ============================================================
-   SECCIÓN DE CONTACTO
-   ============================================================ */
+/* SECCIÓN DE CONTACTO */
 .contacto-section {
   padding-block: 3.2rem;
   width: 100%;
@@ -1296,16 +1272,12 @@ section{ padding-block:5.12rem; position:relative; }
   filter: none; 
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
+/* FOOTER */
 .site-footer{ border-top:var(--border-w) solid var(--line); padding-block:4.16rem; margin-top:3.2rem; }
 .footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.6rem; align-items:center; }
 .footer-row p{ margin:0; font-family:var(--font-mono); font-size:1.152rem; color:var(--fog-dim); }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* RESPONSIVE */
 @media (max-width: 63.9375rem) {
   
   .hero-grid {
@@ -1343,7 +1315,11 @@ section{ padding-block:5.12rem; position:relative; }
 @media (max-width: 47.9375rem) {
   .nav-bar{ flex-wrap:wrap; }
   .nav-search{ order:3; max-width:none; width:100%; margin:0; }
-  .nav-toggle{ display:inline-block; margin-left:auto; }
+  .nav-toggle{ 
+      display: inline-block;
+      margin-right: auto;
+      order: 5;
+   }
   .nav{
     order:4; width:100%;
     display:none;
@@ -1372,7 +1348,7 @@ section{ padding-block:5.12rem; position:relative; }
     order:1;
     display:flex;
     flex-direction:column;
-    align-items:center;
+    align-items:center; /**/
   }
 
   .detalle-badges,

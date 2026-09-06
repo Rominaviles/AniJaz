@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js")
+      navigator.serviceWorker.register("/service-worker.js")
         .then((reg) => console.log("SW registrado:", reg.scope))
         .catch((err) => console.error("Error al registrar SW:", err));
     });
@@ -182,10 +182,7 @@ function setupLimpiarFiltros() {
   });
 }
 
-// ============================================================
 // DETALLE
-// ============================================================
-
 async function initDetalle() {
   const container = document.getElementById("detalle-contenido");
   if (!container) return;
@@ -498,10 +495,7 @@ function renderCards(container, list, esVistaFavoritos = false) {
   }
 }
 
-// ============================================================
 // PANEL DESPLEGABLE 
-// ============================================================
-
 let animeActual = null;
 let feedbackTimeout = null;
 

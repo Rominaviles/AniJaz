@@ -13,7 +13,7 @@ const ASSETS_TO_CACHE = [
   "js/metodos/animeStorage.js",
   "js/metodos/animeText.js",
   "js/services/animeService.js",
-  "/js/prueba.js",
+  "/js/app.js",
 ];
 
 self.addEventListener("install", (event) => {

@@ -1,4 +1,3 @@
-
 async function getHomeData() {
   try {
     const [emisionRes, destacadosRes, proximosRes] = await Promise.all([
@@ -21,7 +20,6 @@ async function getHomeData() {
     return { emision: [], destacados: [], proximos: [] };
   }
 }
-
 
 async function getCatalogoData(filtros) {
   try {
