@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  inicializarNaV();
   setupSearchForms();
 
   const gridHome = document.getElementById("grid-emision") || document.getElementById("grid-destacados") || document.getElementById("grid-proximos");
@@ -37,20 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (contenedorDetalle) initDetalle();
   if (gridFavoritos) initFavoritos();
 });
-
-// ============================================================
-// SERVICE WORKER
-// ============================================================
-
-function registrarServiceWorker() {
-  if (!("serviceWorker" in navigator)) return;
-
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then((reg) => console.log("SW registrado:", reg.scope))
-      .catch((err) => console.error("Error al registrar SW:", err));
-  });
-}
 
 // ============================================================
 // MODO OFFLINE (mensaje reutilizable)
@@ -163,6 +150,17 @@ async function initCatalogo() {
       "Sin conexión a la red",
       "Ups, acá trabajamos con conexión."
     );
+  }
+}
+
+function inicializarNaV(){
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".nav");
+  if(toggle && nav){
+    toggle.addEventListener("click", () => {
+      const abierto = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(abierto));
+    });
   }
 }
 
