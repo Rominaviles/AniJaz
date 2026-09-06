@@ -49,11 +49,11 @@ function registrarServiceWorker() {
 
 function crearMensajeOffline(titulo, texto) {
   return `
-    <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-      <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
+    <div class="offline-container-row">
+      <img src="img/offline.png" alt="Sin conexión" class="offline-img-small" onerror="this.style.display='none'">
       <div>
-        <h3 style="margin: 0 0 5px 0; color: #fff;">${titulo}</h3>
-        <p style="margin: 0; color: #aaa;">${texto}</p>
+        <h3 class="offline-title-small">${titulo}</h3>
+        <p class="offline-text-small">${texto}</p>
       </div>
     </div>
   `;
@@ -413,6 +413,19 @@ function initFavoritos() {
   if (!container) return;
 
   const favoritos = obtenerFavoritos();
+
+  if (!favoritos || favoritos.length === 0) {
+    container.innerHTML = `
+      <div class="offline-container-column">
+        <img src="img/offline2.png" alt="Sin favoritos" class="offline-img-large" onerror="this.style.display='none'">
+        <div>
+          <h3 class="offline-title-large">Mmm... sospechoso. ¿Seguro que viste anime este año?</h3>
+          <p class="offline-text-large">Agregá tus favoritos acá.</p>
+        </div>
+      </div>
+    `; 
+    return;
+  }
   renderCards(container, favoritos, true);
 }
 

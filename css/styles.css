@@ -24,6 +24,8 @@
   --fog-dim:#7c84a3;
   --paper:#edebe4;
 
+  --overlay-soft:rgba(255,255,255,.03);
+
   --font-display:'Bebas Neue', sans-serif;
   --font-body:'Inter', sans-serif;
   --font-mono:'Space Mono', monospace;
@@ -715,6 +717,10 @@ section{
   max-width: 60ch;
 }
 
+.catalogo-section {
+  padding-block: 2rem 4rem;
+}
+
 .filters{
   display:flex; gap:1.6rem; flex-wrap:wrap; align-items:flex-end; 
   background:var(--night-900); border:var(--border-w) solid var(--line); border-radius:var(--radius-lg);
@@ -761,6 +767,45 @@ section{
 .btn-limpiar-catalogo:hover{
   border-color:var(--cyan);
   color:var(--cyan);
+}
+
+.cta-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 3.2rem;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--paper);
+  background: var(--night-900);
+  border: var(--border-w) solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+}
+
+.btn-cta:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--panel);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.3);
+}
+
+.btn-cta::after {
+  content: "→";
+  transition: transform 0.3s ease;
+}
+
+.btn-cta:hover::after {
+  transform: translateX(0.4rem);
 }
 
 /* ============================================================
@@ -826,6 +871,78 @@ section{
   animation:blink 1s steps(2) infinite;
 }
 @keyframes blink{ 50%{ opacity:.15; } }
+
+/* ============================================================
+   ESTADOS SIN CONEXIÓN / SIN DATOS
+   ============================================================ */
+.offline-container-row,
+.offline-container-column {
+  display: flex;
+  align-items: center;
+  grid-column: 1 / -1;
+  background: var(--overlay-soft);
+  border-radius: var(--radius-lg);
+}
+
+.offline-container-row {
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.offline-container-column {
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.offline-img-small,
+.offline-img-large {
+  object-fit: contain;
+}
+
+.offline-img-small {
+  width: 10rem;
+  height: 10rem;
+  opacity: 0.7;
+}
+
+.offline-img-large {
+  width: 30rem;
+  height: 30rem;
+  opacity: 0.9;
+}
+
+.offline-title-small,
+.offline-title-large {
+  margin: 0;
+  color: var(--paper);
+}
+
+.offline-title-small {
+  margin-bottom: 0.5rem;
+  font-size: 3rem;
+}
+
+.offline-title-large {
+  margin-bottom: 0.8rem;
+  font-size: 3rem;
+}
+
+.offline-text-small,
+.offline-text-large {
+  margin: 0;
+  color: var(--fog-dim);
+}
+
+.offline-text-small {
+  font-size: 2rem;
+}
+
+.offline-text-large {
+  font-size: 2rem;
+}
 
 /* ============================================================
    DETALLE DINÁMICO (renderDetalle)
@@ -1548,51 +1665,4 @@ section{
 
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
-}
-
-/* ============================================================ */
-/* SECCIÓN CATÁLOGO COMPLETO                                    */
-/* ============================================================ */
-
-.catalogo-section {
-  padding-block: 2rem 4rem;
-}
-
-.cta-wrapper {
-  display: flex;
-  justify-content: flex-end; 
-}
-
-.btn-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 1.2rem 3.2rem;
-  font-family: var(--font-mono);
-  font-size: 1.4rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--paper);
-  background: var(--night-900);
-  border: var(--border-w) solid var(--line);
-  border-radius: var(--radius-lg);
-  transition: all 0.3s ease;
-}
-
-.btn-cta:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-  background: var(--panel);
-  transform: translateY(-0.2rem);
-  box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.3);
-}
-
-.btn-cta::after {
-  content: "→";
-  transition: transform 0.3s ease;
-}
-
-.btn-cta:hover::after {
-  transform: translateX(0.4rem);
 }
