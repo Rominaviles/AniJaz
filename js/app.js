@@ -38,6 +38,40 @@ document.addEventListener("DOMContentLoaded", () => {
   if (gridFavoritos) initFavoritos();
 });
 
+// ============================================================
+// SERVICE WORKER
+// ============================================================
+
+function registrarServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then((reg) => console.log("SW registrado:", reg.scope))
+      .catch((err) => console.error("Error al registrar SW:", err));
+  });
+}
+
+// ============================================================
+// MODO OFFLINE (mensaje reutilizable)
+// ============================================================
+
+function crearMensajeOffline(titulo, texto) {
+  return `
+    <div class="offline-container-row">
+      <img src="img/offline.png" alt="Sin conexión" class="offline-img-small" onerror="this.style.display='none'">
+      <div>
+        <h3 class="offline-title-small">${titulo}</h3>
+        <p class="offline-text-small">${texto}</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// HOME
+// ============================================================
+
 async function initHome() {
   const gridEmision = document.getElementById("grid-emision");
   const gridDestacados = document.getElementById("grid-destacados");
@@ -57,18 +91,13 @@ async function initHome() {
     if (gridEmision) renderCards(gridEmision, emisionMapeada);
     if (gridDestacados) renderCards(gridDestacados, destacadosMapeados);
     if (gridProximos) renderCards(gridProximos, proximosMapeados);
-} catch (error) {
+  } catch (error) {
     console.warn("Modo offline detectado:", error);
 
-    const contenidoOffline = `
-      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
-        <div>
-          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
-          <p style="margin: 0; color: #aaa;">Ups, acá trabajamos con conexión.</p>
-        </div>
-      </div>
-    `;
+    const contenidoOffline = crearMensajeOffline(
+      "Sin conexión a la red",
+      "Ups, acá trabajamos con conexión."
+    );
 
     if (gridEmision) gridEmision.innerHTML = contenidoOffline;
     if (gridDestacados) gridDestacados.innerHTML = contenidoOffline;
@@ -76,12 +105,16 @@ async function initHome() {
   }
 }
 
+// ============================================================
+// CATÁLOGO
+// ============================================================
+
 async function initCatalogo() {
   const container = document.getElementById("grid-catalogo");
   if (!container) return;
 
   const params = new URLSearchParams(window.location.search);
-  
+
   const filtros = {
     busqueda: params.get("busqueda") || "",
     genero: params.get("genero") || "",
@@ -98,44 +131,38 @@ async function initCatalogo() {
   container.innerHTML = "<div class='loading'>Buscando el anime…</div>";
 
   try {
-      const { animes, total } = await getCatalogoData(filtros);
+    const { animes, total } = await getCatalogoData(filtros);
 
-      if (!animes || animes.length === 0) {
-        throw new Error("No hay datos disponibles sin conexión");
-      }
-      
-      renderCards(container, animes);
+    if (!animes || animes.length === 0) {
+      throw new Error("No hay datos disponibles sin conexión");
+    }
 
-      const selectGenero = document.querySelector(".select-genero");
-      const selectTemporada = document.querySelector(".select-temporada");
-      const selectAnio = document.querySelector(".select-anio");
-      const selectEstado = document.querySelector(".select-estado");
-      const selectOrden = document.querySelector(".select-orden");
+    renderCards(container, animes);
 
-      if (selectAnio) selectAnio.value = filtros.anio;
-      if (selectGenero) selectGenero.value = filtros.genero;
-      if (selectTemporada) selectTemporada.value = filtros.temporada;
-      if (selectEstado) selectEstado.value = filtros.estado;
-      if (selectOrden) {
-        selectOrden.value = filtros.orden || "-userCount";
-      }
-      const totalPaginas = Math.max(1, Math.ceil(total / 10));
-      renderPaginacion(filtros.pagina, totalPaginas);
-    
+    const selectGenero = document.querySelector(".select-genero");
+    const selectTemporada = document.querySelector(".select-temporada");
+    const selectAnio = document.querySelector(".select-anio");
+    const selectEstado = document.querySelector(".select-estado");
+    const selectOrden = document.querySelector(".select-orden");
+
+    if (selectAnio) selectAnio.value = filtros.anio;
+    if (selectGenero) selectGenero.value = filtros.genero;
+    if (selectTemporada) selectTemporada.value = filtros.temporada;
+    if (selectEstado) selectEstado.value = filtros.estado;
+    if (selectOrden) {
+      selectOrden.value = filtros.orden || "-userCount";
+    }
+
+    const totalPaginas = Math.max(1, Math.ceil(total / 10));
+    renderPaginacion(filtros.pagina, totalPaginas);
+
   } catch (error) {
-        console.warn("Modo offline detectado:", error);
+    console.warn("Modo offline detectado:", error);
 
-    const contenidoOffline = `
-      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; grid-column: 1 / -1; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
-        <div>
-          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
-          <p style="margin: 0; color: #aaa;">Ups, acá trabajamos con conexión.</p>
-        </div>
-      </div>
-    `;
-
-    container.innerHTML = contenidoOffline;   
+    container.innerHTML = crearMensajeOffline(
+      "Sin conexión a la red",
+      "Ups, acá trabajamos con conexión."
+    );
   }
 }
 
@@ -215,20 +242,15 @@ async function initDetalle() {
 
   if (anime) {
     renderDetalle(container, anime);
-    
+
     requestAnimationFrame(() => {
       setupFavoritoPanel(anime);
     });
   } else {
-    container.innerHTML = `
-      <div class="offline-container" style="display: flex; align-items: center; gap: 20px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-        <img src="img/offline.png" alt="Sin conexión" style="width: 80px; height: 80px; opacity: 0.7;" onerror="this.style.display='none'">
-        <div>
-          <h3 style="margin: 0 0 5px 0; color: #fff;">Sin conexión a la red</h3>
-          <p style="margin: 0; color: #aaa;">Este anime no está guardado y no hay conexión para buscarlo.</p>
-        </div>
-      </div>
-    `;
+    container.innerHTML = crearMensajeOffline(
+      "Sin conexión a la red",
+      "Este anime no está guardado y no hay conexión para buscarlo."
+    );
   }
 }
 
@@ -251,7 +273,7 @@ function renderDetalle(container, anime) {
   const textoBtnFav = yaEsFav ? "♥ Quitar de Favoritos" : "♡ Agregar a Favoritos";
 
   const anio = anime.startDate ? anime.startDate.slice(0, 4) : "N/C";
-  
+
   // Variables protegidas para evitar errores si faltan datos en localStorage
   const tipoShowTexto = anime.showType ? anime.showType : "N/C";
   const tipoShowLower = anime.showType ? anime.showType.toLowerCase() : "n/c";
@@ -310,7 +332,7 @@ function renderDetalle(container, anime) {
               <div class="form-group">
                 <label for="fav-puntuacion" class="form-label">🎯 Tu puntuación</label>
                 <div class="puntuacion-container">
-                  <input type="range" id="fav-puntuacion" name="puntuacion" min="0" max="10" step="0.5" value="0" 
+                  <input type="range" id="fav-puntuacion" name="puntuacion" min="0" max="10" step="0.5" value="0"
                          class="puntuacion-slider">
                   <span id="puntuacion-valor" class="puntuacion-valor">—</span>
                 </div>
@@ -338,8 +360,8 @@ function renderDetalle(container, anime) {
               <!-- Nota personal -->
               <div class="form-group form-group-last">
                 <label for="fav-nota" class="form-label">✍️ Nota personal</label>
-                <textarea id="fav-nota" name="nota" maxlength="300" rows="3" 
-                          placeholder="¿Qué te pareció? ¿Qué destacarías?" 
+                <textarea id="fav-nota" name="nota" maxlength="300" rows="3"
+                          placeholder="¿Qué te pareció? ¿Qué destacarías?"
                           class="form-control form-textarea"></textarea>
                 <small class="form-help"><span id="contador-nota">0</span>/300 caracteres</small>
               </div>
@@ -365,7 +387,7 @@ function renderDetalle(container, anime) {
     <div class="detalle-stats-grid">
       <div class="stat-card">
         <span class="stat-label">Fecha de estreno</span>
-        <span class="stat-value">${formatearFecha ? formatearFecha(anime.startDate) : (anime.startDate || "N/C")}</span>
+        <span class="stat-value">${formatearFecha(anime.startDate)}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Duración por episodio</span>
@@ -388,12 +410,28 @@ function renderDetalle(container, anime) {
   `;
 }
 
+// ============================================================
+// FAVORITOS / HISTORIAL / TARJETAS
+// ============================================================
 
 function initFavoritos() {
   const container = document.getElementById("grid-favoritos");
   if (!container) return;
 
   const favoritos = obtenerFavoritos();
+
+  if (!favoritos || favoritos.length === 0) {
+    container.innerHTML = `
+      <div class="offline-container-column">
+        <img src="img/offline2.png" alt="Sin favoritos" class="offline-img-large" onerror="this.style.display='none'">
+        <div>
+          <h3 class="offline-title-large">Mmm... sospechoso. ¿Seguro que viste anime este año?</h3>
+          <p class="offline-text-large">Agregá tus favoritos acá.</p>
+        </div>
+      </div>
+    `; 
+    return;
+  }
   renderCards(container, favoritos, true);
 }
 
@@ -453,9 +491,47 @@ function renderCards(container, list, esVistaFavoritos = false) {
       ? `<img src="${anime.poster}" alt="${anime.titulo}" loading="lazy">`
       : `<span class="inicial">${anime.titulo ? anime.titulo.charAt(0) : "A"}</span>`;
 
-    const extraInfoHTML = anime.etiqueta ? `
+    // Construcción de badges personalizados
+    let badgesHTML = "";
+    let notaHTML = "";
+
+    // 1. Estado de seguimiento (VIENDO, COMPLETADO, etc)
+    if (anime.estadoSeguimiento && anime.estadoSeguimiento.trim() !== "") {
+      const emoji = anime.estadoSeguimiento === "Viendo" ? "▶️" :
+                    anime.estadoSeguimiento === "Completado" ? "✅" :
+                    anime.estadoSeguimiento === "Abandonado" ? "⏸️" :
+                    anime.estadoSeguimiento === "Esperando" ? "⏳" : "📋";
+      badgesHTML += `<span class="badge-estado">${emoji} ${anime.estadoSeguimiento}</span>`;
+    }
+
+    // 2. Puntuación (si es mayor a 0)
+    if (anime.puntuacion && parseFloat(anime.puntuacion) > 0) {
+      badgesHTML += `<span class="badge-puntuacion">⭐ ${anime.puntuacion}/10</span>`;
+    }
+
+    // 3. Etiqueta (si existe)
+    if (anime.etiqueta && anime.etiqueta.trim() !== "") {
+      badgesHTML += `<span class="badge-etiqueta">#${anime.etiqueta}</span>`;
+    }
+
+    // 4. Prioridad (si es mayor a 1)
+    if (anime.prioridad && parseInt(anime.prioridad) > 1) {
+      badgesHTML += `<span class="badge-prioridad">🔥 ${anime.prioridad}</span>`;
+    }
+
+    // 5. Nota personal (si existe)
+    if (anime.nota && anime.nota.trim() !== "") {
+      notaHTML = `
+        <div class="card-nota">
+          <span class="nota-label">📝</span>
+          <span class="nota-texto">${anime.nota}</span>
+        </div>
+      `;
+    }
+
+    const extraHTML = badgesHTML ? `
       <div class="card-tag-extra">
-        <strong>[${anime.estadoSeguimiento || 'Para ver'}]</strong> ${anime.etiqueta} (Prio: ${anime.prioridad})
+        ${badgesHTML}
       </div>
     ` : "";
 
@@ -476,7 +552,8 @@ function renderCards(container, list, esVistaFavoritos = false) {
             <span class="stars">★ ${anime.rating || '-'}</span>
             <span>${anime.duracionMin ? anime.duracionMin + ' min' : ''}</span>
           </div>
-          ${extraInfoHTML}
+          ${extraHTML}
+          ${notaHTML}
         </div>
       </a>
     `;
@@ -502,31 +579,31 @@ let feedbackTimeout = null;
 
 function setupFavoritoPanel(anime) {
   animeActual = anime;
-  
+
   const panel = document.getElementById('panel-favorito');
   const btnToggle = document.getElementById('btn-toggle-panel');
   const btnFav = document.getElementById('btn-fav');
   const btnCerrar1 = document.getElementById('btn-cerrar-panel');
   const btnCerrar2 = document.getElementById('btn-cerrar-panel-2');
   const form = document.getElementById('form-favorito');
-  
+
   if (!panel || !btnFav) {
     console.warn('Panel o botón no encontrado');
     return;
   }
-  
+
   configurarBotonFavorito(anime, panel);
-  
+
   if (btnToggle) {
     btnToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       togglePanel(panel, btnToggle);
     });
   }
-  
+
   if (btnCerrar1) btnCerrar1.addEventListener('click', () => cerrarPanel(panel, btnToggle));
   if (btnCerrar2) btnCerrar2.addEventListener('click', () => cerrarPanel(panel, btnToggle));
-  
+
   document.addEventListener('click', (e) => {
     const target = e.target;
     const isPanel = target.closest('#panel-favorito');
@@ -536,9 +613,9 @@ function setupFavoritoPanel(anime) {
       cerrarPanel(panel, btnToggle);
     }
   });
-  
+
   configurarInteraccionesFormulario();
-  
+
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -576,13 +653,13 @@ function mostrarFeedback(btn, mensaje, clase) {
     clearTimeout(feedbackTimeout);
     feedbackTimeout = null;
   }
-  
+
   const textoOriginal = btn.textContent;
-  
+
   btn.textContent = mensaje;
   btn.classList.remove('feedback-success', 'feedback-error', 'feedback');
   btn.classList.add('feedback', clase);
-  
+
   feedbackTimeout = setTimeout(() => {
     btn.textContent = textoOriginal;
     btn.classList.remove('feedback', 'feedback-success', 'feedback-error');
@@ -594,13 +671,13 @@ function configurarBotonFavorito(anime, panel) {
   const btnFav = document.getElementById('btn-fav');
   const btnToggle = document.getElementById('btn-toggle-panel');
   if (!btnFav) return;
-  
+
   btnFav.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const yaEsFav = esFavorito(String(anime.id));
-    
+
     if (yaEsFav) {
       eliminarDeFavoritos(String(anime.id));
       btnFav.textContent = '♡ Agregar a Favoritos';
@@ -621,11 +698,11 @@ function configurarBotonFavorito(anime, panel) {
         fecha: new Date().toISOString()
       };
       guardarEnFavoritos(data);
-      
+
       btnFav.textContent = '♥ Quitar de Favoritos';
       btnFav.classList.add('is-favorito');
       mostrarFeedback(btnFav, 'AGREGADO', 'feedback-success');
-      
+
       cargarDatosExistentes(anime);
       abrirPanel(panel, btnToggle);
     }
@@ -640,7 +717,7 @@ function configurarInteraccionesFormulario() {
       valor.textContent = slider.value === '0' ? '—' : slider.value;
     });
   }
-  
+
   const textarea = document.getElementById('fav-nota');
   const contador = document.getElementById('contador-nota');
   if (textarea && contador) {
@@ -654,19 +731,19 @@ function cargarDatosExistentes(anime) {
   const favoritos = obtenerFavoritos();
   const data = favoritos.find(f => String(f.id) === String(anime.id));
   if (!data) return;
-  
+
   const slider = document.getElementById('fav-puntuacion');
   const valor = document.getElementById('puntuacion-valor');
   if (slider && data.puntuacion) {
     slider.value = data.puntuacion;
     valor.textContent = data.puntuacion === '0' ? '—' : data.puntuacion;
   }
-  
+
   const select = document.getElementById('fav-estado-seguimiento');
   if (select && data.estadoSeguimiento) {
     select.value = data.estadoSeguimiento;
   }
-  
+
   const textarea = document.getElementById('fav-nota');
   const contador = document.getElementById('contador-nota');
   if (textarea && data.nota) {
@@ -678,7 +755,7 @@ function cargarDatosExistentes(anime) {
 function guardarFavoritoDesdePanel(anime, panel, btnToggle) {
   const favoritos = obtenerFavoritos();
   const existente = favoritos.find(f => String(f.id) === String(anime.id)) || {};
-  
+
   const data = {
     id: String(anime.id),
     titulo: anime.titulo,
@@ -686,30 +763,35 @@ function guardarFavoritoDesdePanel(anime, panel, btnToggle) {
     rating: anime.rating,
     duracionMin: anime.duracionMin,
     estado: anime.estado,
-    puntuacion: document.getElementById('fav-puntuacion').value || '0',
-    estadoSeguimiento: document.getElementById('fav-estado-seguimiento').value || '',
-    nota: document.getElementById('fav-nota').value.trim() || '',
+    puntuacion: document.getElementById('fav-puntuacion')?.value || '0',
+    estadoSeguimiento: document.getElementById('fav-estado-seguimiento')?.value || '',
+    nota: document.getElementById('fav-nota')?.value?.trim() || '',
     prioridad: existente.prioridad || 1,
     fecha: new Date().toISOString()
   };
-  
+
   guardarEnFavoritos(data);
-  
+
   const btnFav = document.getElementById('btn-fav');
   if (btnFav) {
     btnFav.textContent = '♥ Quitar de Favoritos';
     btnFav.classList.add('is-favorito');
     mostrarFeedback(btnFav, '✅ Guardado', 'feedback-success');
   }
-  
+
   cerrarPanel(panel, btnToggle);
 }
+
+// ============================================================
+// FILTROS ESTÁTICOS Y GÉNEROS
+// ============================================================
 
 function poblarFiltrosEstaticos() {
   const selectTemporada = document.querySelector(".select-temporada");
   const selectEstado = document.querySelector(".select-estado");
   const selectOrden = document.querySelector(".select-orden");
   const selectAnio = document.querySelector(".select-anio");
+
   if (selectAnio && selectAnio.options.length <= 1) {
     const anioActual = new Date().getFullYear();
     let opciones = `<option value="">Todos</option>`;
@@ -766,6 +848,10 @@ async function cargarGenerosEnSelect() {
   }
 }
 
+// ============================================================
+// BÚSQUEDA
+// ============================================================
+
 function setupSearchForms() {
   document.querySelectorAll("[data-nav-search]").forEach((form) => {
     form.addEventListener("submit", (e) => {
@@ -776,6 +862,10 @@ function setupSearchForms() {
     });
   });
 }
+
+// ============================================================
+// PAGINACIÓN
+// ============================================================
 
 function generarRangoPaginas(paginaActual, totalPaginas) {
   const delta = 1;
