@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupFiltrosForm();
     setupLimpiarFiltros();
   }
+
   if (contenedorDetalle) initDetalle();
   if (gridFavoritos) initFavoritos();
 });

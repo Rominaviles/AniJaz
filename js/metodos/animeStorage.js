@@ -10,7 +10,7 @@ function _leerJSON(key) {
   }
 }
 
-// --- Favoritos ---
+// FAVORITOS
 function obtenerFavoritos() {
   return _leerJSON(STORAGE_KEY_FAVORITOS);
 }
@@ -38,7 +38,7 @@ function eliminarDeFavoritos(id) {
   localStorage.setItem(STORAGE_KEY_FAVORITOS, JSON.stringify(favs));
 }
 
-// --- Historial ---
+// HISTORIAL
 function obtenerHistorial() {
   return _leerJSON(STORAGE_KEY_HISTORIAL);
 }
