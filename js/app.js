@@ -1,13 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/service-worker.js")
-        .then((reg) => console.log("SW registrado:", reg.scope))
-        .catch((err) => console.error("Error al registrar SW:", err));
-    });
-  }
-
+  
+  registrarServiceWorker();
   inicializarNaV();
   setupSearchForms();
 
@@ -20,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (btnLimpiarHistorial) {
     btnLimpiarHistorial.addEventListener("click", () => {
-      limpiarHistorial();
       initHistorial();
     });
   }
@@ -38,6 +30,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if (contenedorDetalle) initDetalle();
   if (gridFavoritos) initFavoritos();
 });
+
+// ============================================================
+// SERVICE WORKER
+// ============================================================
+
+function registrarServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js")
+      .then((reg) => console.log("SW registrado:", reg.scope))
+      .catch((err) => console.error("Error al registrar SW:", err));
+  });
+}
 
 // ============================================================
 // MODO OFFLINE (mensaje reutilizable)
@@ -208,7 +214,10 @@ function setupLimpiarFiltros() {
   });
 }
 
+// ============================================================
 // DETALLE
+// ============================================================
+
 async function initDetalle() {
   const container = document.getElementById("detalle-contenido");
   if (!container) return;
@@ -571,7 +580,10 @@ function renderCards(container, list, esVistaFavoritos = false) {
   }
 }
 
-// PANEL DESPLEGABLE 
+// ============================================================
+// PANEL DESPLEGABLE DE FAVORITOS
+// ============================================================
+
 let animeActual = null;
 let feedbackTimeout = null;
 
