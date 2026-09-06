@@ -1549,3 +1549,50 @@ section{
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
 }
+
+/* ============================================================ */
+/* SECCIÓN CATÁLOGO COMPLETO                                    */
+/* ============================================================ */
+
+.catalogo-section {
+  padding-block: 2rem 4rem;
+}
+
+.cta-wrapper {
+  display: flex;
+  justify-content: flex-end; 
+}
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 3.2rem;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--paper);
+  background: var(--night-900);
+  border: var(--border-w) solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+}
+
+.btn-cta:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--panel);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.3);
+}
+
+.btn-cta::after {
+  content: "→";
+  transition: transform 0.3s ease;
+}
+
+.btn-cta:hover::after {
+  transform: translateX(0.4rem);
+}
