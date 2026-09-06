@@ -53,6 +53,7 @@ function guardarEnHistorial(anime) {
     rating: anime.rating,
     duracionMin: anime.duracionMin,
     estado: anime.estado,
+    sinopsis: anime.sinopsis || "",
     visitadoEn: new Date().toISOString()
   };
 
@@ -75,4 +76,21 @@ function obtenerSinopsisGuardada(id) {
   if (hist && hist.sinopsis) return hist.sinopsis;
 
   return null; 
+}
+
+function guardarSinopsisTraducidaEnAnime(animeId, sinopsisTraducida) {
+  const actualizarLista = (claveStorage) => {
+    let lista = JSON.parse(localStorage.getItem(claveStorage)) || [];
+    const index = lista.findIndex(item => String(item.id) === String(animeId));
+    if (index !== -1) {
+      lista[index].sinopsis = sinopsisTraducida;
+      localStorage.setItem(claveStorage, JSON.stringify(lista));
+      return true;
+    }
+    return false;
+  };
+
+  if (!actualizarLista(STORAGE_KEY_FAVORITOS)) {
+    actualizarLista(STORAGE_KEY_HISTORIAL);
+  }
 }
