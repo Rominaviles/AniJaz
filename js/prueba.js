@@ -217,21 +217,35 @@ async function initDetalle() {
     return;
   }
 
-  let anime = obtenerFavoritos().find(f => String(f.id) === String(animeId)) ||
-              obtenerHistorial().find(h => String(h.id) === String(animeId));
+  // 1. Buscamos si ya lo tienes en favoritos o historial para rescatar tus notas/sinopsis guardada
+  let animeGuardado = obtenerFavoritos().find(f => String(f.id) === String(animeId)) ||
+                      obtenerHistorial().find(h => String(h.id) === String(animeId));
 
-  const tieneDatosCompletos = anime && anime.sinopsis && anime.sinopsis !== "Sin sinopsis disponible.";
+  let anime = null;
 
-  if (!tieneDatosCompletos && navigator.onLine) {
+  // 2. Intentamos buscar siempre los datos frescos a la API si hay conexión
+  if (navigator.onLine) {
     try {
       const animeOnline = await getAnimeDetalle(animeId);
       if (animeOnline) {
         anime = animeOnline;
+        // Si ya tenías una sinopsis o notas guardadas localmente, las preservamos en el objeto online
+        if (animeGuardado) {
+          anime.sinopsis = animeGuardado.sinopsis || anime.sinopsis;
+          anime.puntuacion = animeGuardado.puntuacion;
+          anime.estadoSeguimiento = animeGuardado.estadoSeguimiento;
+          anime.nota = animeGuardado.nota;
+        }
         guardarEnHistorial(anime);
       }
     } catch (error) {
-      console.warn("No se pudo actualizar desde la API, usando datos locales:", error);
+      console.warn("Error al conectar con la API, usando datos locales:", error);
     }
+  }
+
+  // 3. Si no hay internet o falló la API, usamos lo que teníamos guardado localmente
+  if (!anime && animeGuardado) {
+    anime = animeGuardado;
   }
 
   if (anime) {
@@ -279,11 +293,12 @@ function renderDetalle(container, anime) {
 
   container.innerHTML = `
     <div class="detalle-backdrop" style="background-image:url('${imagenPoster}')"></div>
-
-    <a href="catalogo.html" class="btn-volver-backdrop">
-      <span class="flecha">«</span> Volver al catálogo
-    </a>
-
+    <div class="cta-wrapper izquierda">
+      <a href="catalogo.html" class="btn-cta btn-izq">
+        Volver al catálogo
+      </a>
+    </div>
+    
     <div class="detalle-hero">
       <div class="detalle-hero-info">
         <div class="detalle-badges">
