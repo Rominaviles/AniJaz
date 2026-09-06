@@ -466,7 +466,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ============================================================
    SECCIONES GENÉRICAS
    ============================================================ */
-section{ padding-block:5.12rem; position:relative; }
+section{ 
+    padding-top: 5.12rem;    
+    padding-bottom: 0.8rem;  
+    position: relative;
+ }
 .channel-head{
   display:flex; align-items:baseline; gap:1.6rem; margin-bottom:2.88rem;
   flex-wrap:wrap;
