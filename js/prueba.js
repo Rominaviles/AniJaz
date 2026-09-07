@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   registrarServiceWorker();
+  inicializarNav();
   setupSearchForms();
 
   const gridHome = document.getElementById("grid-emision") || document.getElementById("grid-destacados") || document.getElementById("grid-proximos");
@@ -93,6 +94,21 @@ async function initHome() {
     if (gridEmision) gridEmision.innerHTML = contenidoOffline;
     if (gridDestacados) gridDestacados.innerHTML = contenidoOffline;
     if (gridProximos) gridProximos.innerHTML = contenidoOffline;
+  }
+}
+
+// ============================================================
+// MENU DESPLEGABLE
+// ============================================================
+
+function inicializarNav(){
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".nav");
+  if(toggle && nav){
+    toggle.addEventListener("click", () => {
+      const abierto = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(abierto));
+    });
   }
 }
 
@@ -943,3 +959,4 @@ function renderPaginacion(paginaActual, totalPaginas) {
 
   contenedor.innerHTML = `${botonAnterior}${numeros}${botonSiguiente}`;
 }
+
