@@ -496,15 +496,15 @@ function renderCards(container, list, esVistaFavoritos = false) {
       claseEstado = "proximamente";
     }
 
+    // <-- AQUÍ AGREGÁS loading="lazy" EN EL TEMPLATE DE LA IMAGEN -->
     const imagenHTML = anime.poster
       ? `<img src="${anime.poster}" alt="${anime.titulo}" loading="lazy">`
       : `<span class="inicial">${anime.titulo ? anime.titulo.charAt(0) : "A"}</span>`;
 
-    // Construcción de badges personalizados
+    // (El resto de tu código de badges y notas sigue igual...)
     let badgesHTML = "";
     let notaHTML = "";
 
-    // 1. Estado de seguimiento (VIENDO, COMPLETADO, etc)
     if (anime.estadoSeguimiento && anime.estadoSeguimiento.trim() !== "") {
       const emoji = anime.estadoSeguimiento === "Viendo" ? "▶️" :
                     anime.estadoSeguimiento === "Completado" ? "✅" :
@@ -513,22 +513,18 @@ function renderCards(container, list, esVistaFavoritos = false) {
       badgesHTML += `<span class="badge-estado">${emoji} ${anime.estadoSeguimiento}</span>`;
     }
 
-    // 2. Puntuación (si es mayor a 0)
     if (anime.puntuacion && parseFloat(anime.puntuacion) > 0) {
       badgesHTML += `<span class="badge-puntuacion">⭐ ${anime.puntuacion}/10</span>`;
     }
 
-    // 3. Etiqueta (si existe)
     if (anime.etiqueta && anime.etiqueta.trim() !== "") {
       badgesHTML += `<span class="badge-etiqueta">#${anime.etiqueta}</span>`;
     }
 
-    // 4. Prioridad (si es mayor a 1)
     if (anime.prioridad && parseInt(anime.prioridad) > 1) {
       badgesHTML += `<span class="badge-prioridad">🔥 ${anime.prioridad}</span>`;
     }
 
-    // 5. Nota personal (si existe)
     if (anime.nota && anime.nota.trim() !== "") {
       notaHTML = `
         <div class="card-nota">
