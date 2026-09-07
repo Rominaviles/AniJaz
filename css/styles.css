@@ -1507,7 +1507,7 @@ section{
    ============================================================ */
 .site-footer{ border-top:var(--border-w) solid var(--line); padding-block:4.16rem; margin-top:3.2rem; }
 .footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.6rem; align-items:center; }
-.footer-row p{ margin:0; font-family:var(--font-mono); font-size:1.152rem; color:var(--fog-dim); }
+.footer-row p{ padding: .5rem; margin:0; font-family:var(--font-mono); font-size:1.152rem; color:var(--fog-dim); }
 
 /* ============================================================
    RESPONSIVE
