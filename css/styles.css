@@ -807,22 +807,21 @@ section{
   flex-direction: row-reverse;
 }
 
-.btn-cta.btn-izq::after {
-  content: "←";
-  transition: transform 0.3s ease;
-}
-
 .btn-cta::after {
   content: "→";
   transition: transform 0.3s ease;
 }
 
-.btn-cta.btn-izq:hover::after {
-  transform: translateX(-0.4rem);
+.btn-cta.btn-izq::after {
+  content: "←";
 }
 
 .btn-cta:hover::after {
   transform: translateX(0.4rem);
+}
+
+.btn-cta.btn-izq:hover::after {
+  transform: translateX(-0.4rem);
 }
 
 /* ============================================================
@@ -931,19 +930,14 @@ section{
   opacity: 0.9;
 }
 
+/* Título y texto: "small" y "large" comparten el mismo tamaño de
+   fuente actualmente, por eso van en una sola regla combinada. Si en
+   el futuro necesitás diferenciarlos, separá el font-size en cada
+   selector como se hace arriba con las imágenes. */
 .offline-title-small,
 .offline-title-large {
-  margin: 0;
+  margin: 0 0 0.8rem;
   color: var(--paper);
-}
-
-.offline-title-small {
-  margin-bottom: 0.5rem;
-  font-size: 3rem;
-}
-
-.offline-title-large {
-  margin-bottom: 0.8rem;
   font-size: 3rem;
 }
 
@@ -951,13 +945,6 @@ section{
 .offline-text-large {
   margin: 0;
   color: var(--fog-dim);
-}
-
-.offline-text-small {
-  font-size: 2rem;
-}
-
-.offline-text-large {
   font-size: 2rem;
 }
 
