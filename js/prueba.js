@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   registrarServiceWorker();
+  inicializarNav();
   setupSearchForms();
 
   const gridHome = document.getElementById("grid-emision") || document.getElementById("grid-destacados") || document.getElementById("grid-proximos");
@@ -93,6 +94,21 @@ async function initHome() {
     if (gridEmision) gridEmision.innerHTML = contenidoOffline;
     if (gridDestacados) gridDestacados.innerHTML = contenidoOffline;
     if (gridProximos) gridProximos.innerHTML = contenidoOffline;
+  }
+}
+
+// ============================================================
+// MENU DESPLEGABLE
+// ============================================================
+
+function inicializarNav(){
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".nav");
+  if(toggle && nav){
+    toggle.addEventListener("click", () => {
+      const abierto = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(abierto));
+    });
   }
 }
 
@@ -939,3 +955,36 @@ function renderPaginacion(paginaActual, totalPaginas) {
 
   contenedor.innerHTML = `${botonAnterior}${numeros}${botonSiguiente}`;
 }
+
+// ============================================================
+// BOTON INSTALAR
+// ============================================================
+let promptEvento = null;
+const btnInstalar = document.getElementById('install');
+
+// El navegador dispara este evento cuando la PWA es instalable
+window.addEventListener('beforeinstallprompt', (evento) => {
+  // Evita que Chrome muestre su propio mini-banner automático
+  evento.preventDefault();
+
+  // Guardamos el evento para dispararlo después, con el click del usuario
+  promptEvento = evento;
+});
+
+// Al hacer click, lanzamos el prompt nativo de instalación
+btnInstalar.addEventListener('click', async () => {
+  if (!promptEvento) return;
+
+  promptEvento.prompt(); // muestra el diálogo nativo
+
+  const resultado = await promptEvento.userChoice;
+  console.log('El usuario eligió:', resultado.outcome); // "accepted" o "dismissed"
+
+  // El evento solo se puede usar una vez
+  promptEvento = null;
+});
+
+// Opcional: detectar si ya se instaló, para no volver a mostrar el botón
+window.addEventListener('appinstalled', () => {
+  console.log('PWA instalada correctamente');
+});
