@@ -30,7 +30,7 @@ Plataforma web para descubrir, organizar y hacer seguimiento de series de anime.
    git clone https://github.com/Rominaviles/AniJaz.git
    ```
 
-2. Levantar un servidor local. Cualquiera de estas opciones funciona:
+2. Levantar un servidor local:
 
    **Extensión Live Server de VS Code:**
    Clic derecho sobre `index.html` → *Open with Live Server*.
