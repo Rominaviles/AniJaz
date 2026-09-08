@@ -3,8 +3,8 @@
 Plataforma web para descubrir, organizar y hacer seguimiento de series de anime. Permite explorar un catálogo con filtros avanzados, guardar favoritos con notas y puntuación personal, y consultar fichas detalladas de cada serie, con soporte offline básico.
 
 **Integrantes:**
-- Romina — [@Rominaviles]
-- Damián — [@damianluna1995] 
+- Romina — [@Rominaviles](https://github.com/Rominaviles)
+- Damián — [@damianluna1995](https://github.com/damianluna1995 )
 
 **Demo (Netlify):** https://anijaz.netlify.app
 
