@@ -36,7 +36,7 @@
       <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">☰</button>
 
       <nav id="main-nav" class="nav" aria-label="Principal">
-        <a href="index.html">Inicio</a>
+        <a href="index.html" aria-current="page">Inicio</a>
         <a href="catalogo.html">Catálogo</a>
         <a href="favoritos.html">Mis Favoritos</a>
         <a href= "contacto.html">Contacto</a>
@@ -114,13 +114,29 @@
       </div>
     </section>
 
+    <section>
+      <div class="container">
+        <div class="cta-wrapper">
+          <a href="catalogo.html" class="btn-cta">
+            Ver catálogo completo
+          </a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
     <div class="container footer-row">
       <p>&copy; 2026 ANIJAZ — Tu guía y organizador de anime.</p>
-      <p><a href="catalogo.html">Ver catálogo completo →</a></p>
     </div>
+    
+    <div class="container">
+      <div class="cta-wrapper">
+        <button id="install" class="btn-cta btn-down">Instalar</button>
+      </div>
+    </div>
+  
   </footer>
 
   <script src="js/fetchs/animeFetch.js"></script>

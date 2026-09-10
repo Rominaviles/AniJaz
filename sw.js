@@ -7,6 +7,7 @@ const ASSETS_TO_CACHE = [
   "contacto.html",
   "css/styles.css",
   "img/offline.png",
+  "img/offline2.png",
   "js/fetchs/animeFetch.js",
   "js/mapeos/animeMapper.js",
   "js/metodos/animeFilter.js",

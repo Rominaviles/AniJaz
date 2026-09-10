@@ -42,7 +42,12 @@ async function getAnimeDetalle(id) {
     if (!res || !res.data) return null;
 
     const anime = mapearAnime(res.data, res.included || []);
+    
     anime.sinopsis = await traducirTexto(anime.sinopsis);
+
+    if (anime.sinopsis && anime.sinopsis !== "Sin sinopsis disponible.") {
+      guardarSinopsisTraducidaEnAnime(anime.id, anime.sinopsis);
+    }
 
     return anime;
   } catch (error) {
