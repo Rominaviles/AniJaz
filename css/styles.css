@@ -842,6 +842,12 @@ section{
   transform: translateY(0.4rem);
 }
 
+@media (display-mode: standalone){
+  #install{
+    display: none;
+  }
+}
+
 /* ============================================================
    PÁGINA FAVORITOS
    ============================================================ */
